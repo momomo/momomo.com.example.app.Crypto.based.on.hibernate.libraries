@@ -1,14 +1,17 @@
 <!---
 -->
 
-## momomo.com.platform.db.base.jpa.session.with.postgres
+## momomo.com.example.app.Crypto
 
-###### Provides the postgres related implementations towards our database repositories 
+###### Example application in its beginning days, right now to provide an overview of the database & transactional libraries, their setups and how their used in a fully working example  
 
 #### Dependencies 
 * [`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core) 
 * [`momomo.com.platform.Lambda`](https://github.com/momomo/momomo.com.platform.Lambda)
+* [`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
+* [`momomo.com.platform.db.base.jpa`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
 * [`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
+* [`momomo.com.platform.db.base.jpa.session.with.postgres`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session.with.postgres)
 
 #### Used by
 * Your application such as  
