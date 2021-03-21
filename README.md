@@ -201,6 +201,16 @@ If you use Spring you would use that. We have here reused our already created an
 
 To be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/blob/master/src/momomo/com/db/%24Entity.java). We can see that this is no longer really required and we will remove this requirement eventually from our `Repository` implementation.
 
+We invoke this method simply as `Bitcoin.S.insert(Time.stamp(), 10000.1)` from anyplace, even a static void main. It will trigger the database generation, scan the entities, setup the `sessionFactory` and get you a transaction and eventually **save the data**.
+
+```java
+public static void main(String[] args){
+  Bitcoin.S.insert(Time.stamp(), 10000.1); // This will work, in case you did not believe it. From any place. Even the command line. Run or debug within your editor.   
+}
+```
+
+You can find more code with plenty more examples, some very comples in **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)**.     
+
 ---
 
 ### Chapter two

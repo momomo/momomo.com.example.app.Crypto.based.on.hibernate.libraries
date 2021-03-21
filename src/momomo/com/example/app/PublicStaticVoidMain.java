@@ -7,7 +7,7 @@ import momomo.com.example.app.entities.Etherum;
 import momomo.com.example.app.entities.Polkadot;
 import momomo.com.example.app.entities.Stellar;
 
-public class Main {
+public class PublicStaticVoidMain {
     
     public static void main(String[] args) {
         // supportTransaction won't populate, read only!    
