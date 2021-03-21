@@ -24,7 +24,7 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     
     public  static final CryptoRepository    R               = new CryptoRepository   (); // Not used other than at the bottom of this file! Can you find it?
-    private static final CryptoDatabase      DATABASE        = new CryptoDatabase     ();
+    public  static final CryptoDatabase      DATABASE        = new CryptoDatabase     (); // You might want to execute some jdbc queries using this one sometimes. We don't in this application but we made it public for you. 
     private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConfig();
     private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
     
@@ -34,6 +34,9 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     
+    /**
+     * We set up the "repository" which gives you access to it all. 
+     */
     public static class CryptoRepository implements $SessionFactoryRepositoryHibernate, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;
