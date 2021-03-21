@@ -6,8 +6,8 @@ import momomo.com.collections.$Set;
 import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$Migrations;
 import momomo.com.db.$Service;
-import momomo.com.db.$TransactionalHibernate;
 import momomo.com.db.$SessionConfig;
+import momomo.com.db.$TransactionalHibernate;
 import momomo.com.db.entities.$EntityId;
 import momomo.com.db.sessionfactory.$SessionFactoryRepositoryHibernate;
 import momomo.com.example.app.entities.Bitcoin;
@@ -23,26 +23,31 @@ public class Crypto {
     
     /////////////////////////////////////////////////////////////////////
     
-    private static final CryptoRepository    R               = new CryptoRepository   ();   
+    private static final CryptoRepository    R               = new CryptoRepository   ();
     private static final CryptoDatabase      DATABASE        = new CryptoDatabase     ();
     private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConfig();
-    private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
-    
+    private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create();
+    public  static final CryptoRepository    repository      = R;
     /**
+     * Commenting on {@link momomo.com.example.app.Crypto#repository}
+     * 
      * We think 
+     * 
      *      Crypto.repository.requireTransction(() -> {
      *         ... 
      *      }) 
-     *      
+     *
      *      looks better than
-     *      
+     *
      *      Crypto.R.requireTransaction(()-> {
-     *      
+     *
      *      })
      *      
+     * We know it is lower case, we know it is static. This is why we left the R for you so you know it is intentional. 
+     * SHIFT + R, is difficult to type.       
+     *
      * But you do as you please. Sorry if you got upset. 
      */
-    public static final CryptoRepository repository = R;
     
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
