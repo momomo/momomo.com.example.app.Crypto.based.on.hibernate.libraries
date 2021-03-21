@@ -1,0 +1,161 @@
+package momomo.com.example.app.crypto;
+
+import momomo.com.Time;
+import momomo.com.db.$TransactionHibernate;
+import momomo.com.example.app.crypto.entities.Bitcoin;
+import momomo.com.example.app.crypto.entities.Etherum;
+import momomo.com.example.app.crypto.entities.Polkadot;
+import momomo.com.example.app.crypto.entities.Stellar;
+
+public class Main {
+    
+    public static void main(String[] args) {
+        // supportTransaction won't populate, read only!    
+        //  ERROR: cannot execute INSERT in a read-only transaction
+        Crypto.repository.supportTransaction(($TransactionHibernate txG) -> {
+            /*Stellar.S.insert(Time.stamp(), mul * 901);
+            Stellar.S.insert(Time.stamp(), mul * 902);
+            Stellar.S.insert(Time.stamp(), mul * 903);
+            Stellar.S.insert(Time.stamp(), mul * 904);
+            Stellar.S.insert(Time.stamp(), mul * 905);*/
+        
+            Crypto.repository.requireTransaction(($TransactionHibernate txF) -> {
+                Stellar.S.insert(Time.stamp(), 1 * 601);
+                Stellar.S.insert(Time.stamp(), 1 * 602);
+                Stellar.S.insert(Time.stamp(), 1 * 603);
+                Stellar.S.insert(Time.stamp(), 1 * 604);
+                Stellar.S.insert(Time.stamp(), 1 * 605);
+            });
+            
+        });
+        
+        if ( true  ) return; 
+        bitcoin(1);
+        etherum(1);
+        polkadot(1);
+        stellar(1);
+        
+        if ( true ) return;
+        
+        // All in one and same transaction!
+        $TransactionHibernate tx = Crypto.repository.requireTransaction();
+        bitcoin(2);
+        etherum(2);
+        polkadot(2);
+        stellar(2);
+        
+        tx.rollback();
+
+        /*polkadot();
+        stellar();*/
+    }
+    
+    private static void bitcoin(int mul) {
+        // Multiple transactions
+        Bitcoin.S.insert(Time.stamp(), mul * 100001);
+        Bitcoin.S.insert(Time.stamp(), mul * 100002);
+        Bitcoin.S.insert(Time.stamp(), mul * 100003);
+        Bitcoin.S.insert(Time.stamp(), mul * 100004);
+        Bitcoin.S.insert(Time.stamp(), mul * 100005);
+    }
+    
+    private static void etherum(int mul) {
+        // Multiple transactions, won't actually insert anything as insert only contains examples
+        Etherum.S.insert(Time.stamp(), mul * 10001);
+        Etherum.S.insert(Time.stamp(), mul * 10002);
+        Etherum.S.insert(Time.stamp(), mul * 10003);
+        Etherum.S.insert(Time.stamp(), mul * 10004);
+        Etherum.S.insert(Time.stamp(), mul * 10005);
+    }
+    
+    private static void polkadot(int mul) {
+        // See the Polkadot entity file to see the recommended way we suggest you use with a base service for your application
+        Polkadot.S.insert(Time.stamp(), mul * 1001);
+        Polkadot.S.insert(Time.stamp(), mul * 1002);
+        Polkadot.S.insert(Time.stamp(), mul * 1003);
+        Polkadot.S.insert(Time.stamp(), mul * 1004);
+        Polkadot.S.insert(Time.stamp(), mul * 1005);
+    }
+    
+    private static void stellar(int mul) {
+        // One transaction
+        Crypto.repository.newTransaction((txA) -> {
+            Stellar.S.insert(Time.stamp(), mul * 101);
+            Stellar.S.insert(Time.stamp(), mul * 102);
+            Stellar.S.insert(Time.stamp(), mul * 103);
+            Stellar.S.insert(Time.stamp(), mul * 104);
+            Stellar.S.insert(Time.stamp(), mul * 105);
+    
+            // Start a new transaction within
+            Crypto.repository.newTransaction(txB -> {
+                Stellar.S.insert(Time.stamp(), mul * 201);
+                Stellar.S.insert(Time.stamp(), mul * 202);
+                Stellar.S.insert(Time.stamp(), mul * 203);
+                Stellar.S.insert(Time.stamp(), mul * 204);
+                Stellar.S.insert(Time.stamp(), mul * 205);
+    
+                // Another one
+                Crypto.repository.newTransaction(txC -> {
+                    Stellar.S.insert(Time.stamp(), mul * 301);
+                    Stellar.S.insert(Time.stamp(), mul * 302);
+                    Stellar.S.insert(Time.stamp(), mul * 303);
+                    Stellar.S.insert(Time.stamp(), mul * 304);
+                    Stellar.S.insert(Time.stamp(), mul * 305);
+                });
+    
+                // Continue on the previous last active one (same as txB) 
+                Crypto.repository.requireTransaction(txD -> {
+                    Stellar.S.insert(Time.stamp(), mul * 401);
+                    Stellar.S.insert(Time.stamp(), mul * 402);
+                    Stellar.S.insert(Time.stamp(), mul * 403);
+                    Stellar.S.insert(Time.stamp(), mul * 404);
+                    Stellar.S.insert(Time.stamp(), mul * 405);
+                });
+                
+                // Neither 201 ... or 401 ... will get into db since that tx rolledback
+                txB.rollback();
+                
+                // The same as txA, no issues there. Should be in.   
+                Crypto.repository.requireTransaction(txE -> {
+                    Stellar.S.insert(Time.stamp(), mul * 501);
+                    Stellar.S.insert(Time.stamp(), mul * 502);
+                    Stellar.S.insert(Time.stamp(), mul * 503);
+                    Stellar.S.insert(Time.stamp(), mul * 504);
+                    Stellar.S.insert(Time.stamp(), mul * 505);
+    
+                    // The same as txA and txE, no issues there. Should enter db.    
+                    Crypto.repository.requireTransaction(($TransactionHibernate txF) -> {
+                        Stellar.S.insert(Time.stamp(), mul * 601);
+                        Stellar.S.insert(Time.stamp(), mul * 602);
+                        Stellar.S.insert(Time.stamp(), mul * 603);
+                        Stellar.S.insert(Time.stamp(), mul * 604);
+                        Stellar.S.insert(Time.stamp(), mul * 605);
+    
+                        // New transaction, will be in    
+                        Crypto.repository.newTransaction(($TransactionHibernate txG) -> {
+                            Stellar.S.insert(Time.stamp(), mul * 701);
+                            Stellar.S.insert(Time.stamp(), mul * 702);
+                            Stellar.S.insert(Time.stamp(), mul * 703);
+                            Stellar.S.insert(Time.stamp(), mul * 704);
+                            Stellar.S.insert(Time.stamp(), mul * 705);
+                        });
+    
+                        // New transaction, won't be in    
+                        Crypto.repository.newTransaction(($TransactionHibernate txH) -> {
+                            Stellar.S.insert(Time.stamp(), mul * 801);
+                            Stellar.S.insert(Time.stamp(), mul * 802);
+                            Stellar.S.insert(Time.stamp(), mul * 803);
+                            Stellar.S.insert(Time.stamp(), mul * 804);
+                            Stellar.S.insert(Time.stamp(), mul * 805);
+                            
+                            txH.rollback();
+                        });
+                    });
+                });
+            });
+        });
+    
+        
+    }
+    
+}

@@ -1,0 +1,251 @@
+package momomo.com.example.app.crypto.entities;
+
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import momomo.com.db.$TransactionHibernate;
+import momomo.com.db.$TransactionOptions;
+import momomo.com.db.$TransactionOptionsHibernate;
+import momomo.com.db.entities.$Entity;
+import momomo.com.example.app.crypto.Crypto;
+import org.hibernate.Session;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.UUID;
+
+/**
+ * Simple sample entity 
+ * 
+ * @author Joseph S.
+ */
+@Entity
+@Table(name = Etherum.Cons.table)
+public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Etherum implements $Entity {
+    
+    @Id
+    private UUID      id;
+    private Timestamp time;
+    private double    usd; // Represents the price in usd
+    
+    /////////////////////////////////////////////////////////////////////
+    
+    /**
+     * We separate constants and transient things from the main entity to keep the entity Etherum clean
+     */
+    public static final class Cons {
+        public static final String table = "etherum";
+    }
+    
+    /////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Represents the service to be used when perfoming table operations on the Etherum table as to separate the 
+     * declaration of the entity from logic applied to it in order to keep the entity Etherum clean.  
+     */
+    public static final Service S = new Service(); public static final class Service { private Service(){}
+        
+        /**
+         * Just a bunch of examples, nothing of it is executed
+         * 
+         * Also 
+         * @see Bitcoin.Service#insert(java.sql.Timestamp, double)
+         * @see Polkadot.Service#insert(java.sql.Timestamp, double)
+         */
+        public Etherum insert(Timestamp time, double usd) {  if ( true ) return null;
+        
+            Etherum entity = new Etherum()
+                .setId(UUID.randomUUID())
+                .setTime(time)
+                .setUsd(usd)
+            ;
+            
+            // Example 1.
+            // Disable autocommit, so we commit when we want
+            Crypto.repository.requireTransaction(($TransactionHibernate transaction) -> {
+                transaction.autocommit(false);
+        
+                save(entity);
+                save(entity);
+                save(entity);
+                save(entity);
+        
+                transaction.commit();
+            });
+    
+            // Example 2.
+            Crypto.repository.requireTransaction((tx) -> {
+                tx.afterCommit(() -> {
+                    // Send email. 
+                    // We have now inserted the value in our database successfully!
+            
+                    // We do not want to send the email unless we actually have 100% inserted the stuff so this is a handy method to use for that 
+                });
+        
+                save(entity);
+            });
+    
+            // Example 3.
+            String returns = Crypto.repository.requireTransaction((tx) -> {
+                save(entity);
+        
+                return "something from the transactional lambda";
+            });
+    
+            // 4. We repeat the return demo
+            Etherum e = Crypto.repository.requireTransaction((tx) -> {
+                return save(entity);
+            });
+    
+            // 5. Maybe we do not want to execute things inside the lambda block but desire more freedom? 
+            $TransactionHibernate tx1 = Crypto.repository.requireTransaction();
+            save(entity);
+            save(entity);
+            save(entity);
+            save(entity);
+            tx1.autocommit(false);
+            tx1.afterCommit  (()-> {});
+            tx1.afterRollback(()-> { /* A crime has been committed! Report error to the FBI! */ });
+            tx1.rollback();
+            tx1.commit();
+    
+            //////////////////////////////////////////////////
+            //////////////////////////////////////////////////
+            //////////////////////////////////////////////////
+    
+            // Example a. 
+            Crypto.repository.newTransaction(() -> {
+                // A new transaction is created! Not reusing an existing one if there is one!
+            });
+    
+            // Example b.
+            Crypto.repository.supportTransaction(() -> {
+                // A read only transaction is created! Writing to the database is not possible, and will result in a terrible offense!
+            });
+    
+            // Example c.
+            Crypto.repository.newTransaction((tx) -> {
+                save(entity);
+        
+                tx.rollback();
+        
+                save(entity);
+        
+                // note, an autocommit will still occur here despite the rollback 
+            });
+    
+            // Example d.
+            Crypto.repository.newTransaction((tx) -> {
+                save(entity);
+    
+    
+                tx.rollback();
+    
+                save(entity);
+        
+                // note, now, the autocommit won't occur, since cancel will set commit to false as well as rolling back
+            });
+    
+            // Example e.
+            Crypto.repository.requireTransaction(() -> {
+                save(entity);
+            }, false /** commit false**/ );
+    
+            // f. 
+            try {
+                Crypto.repository.requireTransaction(() -> {
+                    throw new IOException();
+                });
+            } catch (IOException exception) {
+                // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+            }
+    
+            // g. 
+            try {
+                File file = Crypto.repository.requireTransaction(() -> {
+                    if ( false ) {
+                        throw new IOException();
+                    }
+                    return new File("");
+                });
+            } catch (IOException exception) {
+                // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+            }
+    
+            // e. 
+            Session s1 = Crypto.repository.requireSession();
+            Session s2 = Crypto.repository.newSession();
+    
+            // Example g.
+            Crypto.repository.requireOptions()
+                .propagation($TransactionOptions.Propagation.NEW)
+                .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
+                .timeout(1000)
+                .create()
+                .execute((tx)-> {
+                    tx.autocommit(false);
+                    tx.afterCommit(()-> {});
+                    tx.afterRollback(()-> {});
+            
+                    // ... 
+                })
+            ;
+    
+            // h. or 
+            $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
+            // ... options.propagation(...) ...
+    
+            // Example i.
+            $TransactionHibernate tx2 = Crypto.repository.requireOptions()
+                .propagation($TransactionOptions.Propagation.NEW)
+                .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
+                .timeout(1000)
+                .create()
+                ;
+    
+            // Example i.
+            Crypto.repository.requireOptions()
+                .timeout(1000)
+                .withConnection((java.sql.Connection connection) -> {
+                    connection.setReadOnly(true);
+                    connection.setCatalog("catalog");
+                    connection.setTransactionIsolation(1);
+                    connection.clearWarnings();
+                    connection.createStatement();
+                    connection.setTypeMap(new HashMap<>());
+                    connection.setHoldability(1);
+                    connection.setSavepoint();
+                    connection.setSavepoint();
+                    // ...
+                })
+                .create()
+                .execute(tx -> {
+                    tx.autocommit(false);
+            
+                    save(entity);
+                    save(entity);
+                    save(entity);
+            
+                    tx.commit();
+                })
+            ;
+            
+            return entity;
+        }
+        
+        /**
+         * Save your entity here anyway you normally do
+         */
+        private Etherum save(Etherum entity) {
+            return entity; // No need to save, as this entire class is an example only
+        }
+    }
+    
+}
