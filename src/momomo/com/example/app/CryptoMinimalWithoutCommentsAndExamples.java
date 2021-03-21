@@ -1,8 +1,8 @@
 package momomo.com.example.app;
 
 import momomo.com.db.$DatabasePostgres;
-import momomo.com.db.$TransactionalHibernate;
 import momomo.com.db.$SessionConfig;
+import momomo.com.db.$TransactionalHibernate;
 import momomo.com.db.sessionfactory.$SessionFactoryRepositoryHibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.tool.schema.TargetType;
