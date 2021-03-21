@@ -42,11 +42,14 @@ public class Crypto {
      *      Crypto.R.requireTransaction(()-> {
      *
      *      })
-     *      
-     * We know it is lower case, we know it is static. This is why we left the R for you so you know it is intentional. 
-     * SHIFT + R, is difficult to type.       
+     * 
+     * SHIFT + R, is also more difficult to type. Crypto.re will automcomplete very well. Crypto.SHIT + R and then e.
+     * 
+     * We know it is lower case, we know it is static. 
+     * 
+     * This is why we left the {@link momomo.com.example.app.Crypto#R} for you so you know it is intentional! 
      *
-     * But you do as you please. Sorry if you got upset. 
+     * But you do as you please. Sorry if we got you upset! 
      */
     
     /////////////////////////////////////////////////////////////////////
