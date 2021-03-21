@@ -23,7 +23,7 @@ public class Crypto {
     
     /////////////////////////////////////////////////////////////////////
     
-    public  static final CryptoRepository    R               = new CryptoRepository   (); // Not used other than at the bottom of this file! Can yo find it?
+    public  static final CryptoRepository    R               = new CryptoRepository   (); // Not used other than at the bottom of this file! Can you find it?
     private static final CryptoDatabase      DATABASE        = new CryptoDatabase     ();
     private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConfig();
     private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
