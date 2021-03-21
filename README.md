@@ -3,7 +3,10 @@
 
 ## momomo.com.example.app.Crypto
 
-###### Example application in its beginning days, right now to provide an overview of the database & transactional libraries, their setups and how their used in a fully working example  
+###### Example application in its early days
+* Right now to provide an overview of the database & transactional libraries, their setups and how they are used in a completely and fully working application
+    *  Requires a running `postgreSQL`
+        * We might support an *in memory database* in the future for this sample application. 
 
 #### Dependencies 
 * [`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core) 
@@ -12,33 +15,21 @@
 * [`momomo.com.platform.db.base.jpa`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
 * [`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
 * [`momomo.com.platform.db.base.jpa.session.with.postgres`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session.with.postgres)
+* [`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)
+* [`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)
+* [`momomo.com.platform.db.transactional.Spring`](https://github.com/momomo/momomo.com.platform.db.transactional.Spring)
 
-#### Used by
-* Your application such as  
+### Background
 
-##### Maven dependencies available on maven central [search.maven.org](https://search.maven.org/search?q=com.momomo)
-##### Dependency   
-```xml
-<dependency>
-  <groupId>com.momomo</groupId>
-  <artifactId>momomo.com.platform.db.base.jpa.session.with.postgres</artifactId>
-  <version>2.1.7</version>
-</dependency>                                                      
-```                         
-##### Repository
-```xml
-<repository>
-    <id>maven-central</id>
-    <url>http://repo1.maven.org/maven2</url>
-</repository>
-```
+The major reason for this sample application was to showcase the [`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional) API. 
+
+But now we believe this is the beginning of an entire application platform coming as we continue to make available more and more of our libraries to the public.
+
+### Guide
 
 
-```
-public abstract class  extends $SessionConfig<DatabasePostgresUsingGlobalsApp> {
 
-}
-```
+
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
