@@ -23,34 +23,10 @@ public class Crypto {
     
     /////////////////////////////////////////////////////////////////////
     
-    private static final CryptoRepository    R               = new CryptoRepository   ();
+    public  static final CryptoRepository    R               = new CryptoRepository   (); // Not used other than at the bottom of this file! Can yo find it?
     private static final CryptoDatabase      DATABASE        = new CryptoDatabase     ();
     private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConfig();
-    private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create();
-    public  static final CryptoRepository    repository      = R;
-    /**
-     * Commenting on {@link momomo.com.example.app.Crypto#repository}
-     * 
-     * We think 
-     * 
-     *      Crypto.repository.requireTransction(() -> {
-     *         ... 
-     *      }) 
-     *
-     *         --- looks better than ---
-     *
-     *      Crypto.R.requireTransaction(()-> {
-     *
-     *      })
-     * 
-     * SHIFT + R, is also more difficult to type. Crypto.re will automcomplete very well. Crypto.SHIT + R and then e.
-     * 
-     * We know it is lower case, we know it is static. 
-     * 
-     * This is why we left the {@link momomo.com.example.app.Crypto#R} for you so you know it is intentional! 
-     *
-     * But you do as you please. Sorry if we got you upset! 
-     */
+    private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
     
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
@@ -240,4 +216,32 @@ public class Crypto {
         }
     }
     
+    
+    
+    /////////////////////////////////////////////////////////////////////
+    // Look, you found the hidden gem!
+    /////////////////////////////////////////////////////////////////////
+    
+    /**
+     * We think 
+     *
+     *      Crypto.repository.requireTransction(() -> {
+     *         ... 
+     *      }) 
+     *
+     *         --- looks better than ---
+     *
+     *      Crypto.R.requireTransaction(()-> {
+     *
+     *      })
+     *
+     * SHIFT + R, is also more difficult to type. Crypto.re will automcomplete very well. Crypto.SHIT + R and then e.
+     *
+     * We know it is lower case, we know it is static. 
+     *
+     * This is why we left the {@link momomo.com.example.app.Crypto#R} for you so you know it is intentional! 
+     *
+     * But you do as you please. Sorry if we got you upset! 
+     */
+    public static final CryptoRepository repository = R;
 }
