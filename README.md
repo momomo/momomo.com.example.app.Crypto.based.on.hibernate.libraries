@@ -173,7 +173,7 @@ We start by looking at our **first entity**
 }
 ```
 
-We highlight the method in `Bitcoin.Service` `insert(Timestamp, double)`. 
+We highlight the method in `Bitcoin.Service.insert(Timestamp, double)`. 
 
 In this method we create the entity 
 
