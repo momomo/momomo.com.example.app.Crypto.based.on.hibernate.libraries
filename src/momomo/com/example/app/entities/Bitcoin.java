@@ -1,4 +1,4 @@
-package momomo.com.example.app.crypto.entities;
+package momomo.com.example.app.entities;
 
 
 import lombok.AccessLevel;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import momomo.com.db.entities.$Entity;
-import momomo.com.example.app.crypto.Crypto;
+import momomo.com.example.app.Crypto;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -68,11 +68,11 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
         /**
          * Save your entity here anyway you would normally do!
          * 
-         * Note, if you extend our base app service {@link momomo.com.example.app.crypto.Crypto.CryptoService} then we would not need to use Crypto.repository.save() but just save()!
+         * Note, if you extend our base app service {@link momomo.com.example.app.Crypto.CryptoService} then we would not need to use Crypto.repository.save() but just save()!
          * 
          * We are just showing the minimal viable here but please see the entities 
-         * {@link momomo.com.example.app.crypto.entities.Polkadot.Service} and {@link momomo.com.example.app.crypto.entities.Stellar.Service}
-         * Which do extend {@link momomo.com.example.app.crypto.Crypto.CryptoService}.   
+         * {@link momomo.com.example.app.entities.Polkadot.Service} and {@link momomo.com.example.app.entities.Stellar.Service}
+         * Which do extend {@link momomo.com.example.app.Crypto.CryptoService}.   
          * 
          */
         private Bitcoin save(Bitcoin entity) {

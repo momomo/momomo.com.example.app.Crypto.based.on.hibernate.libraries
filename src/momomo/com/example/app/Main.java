@@ -1,11 +1,11 @@
-package momomo.com.example.app.crypto;
+package momomo.com.example.app;
 
 import momomo.com.Time;
 import momomo.com.db.$TransactionHibernate;
-import momomo.com.example.app.crypto.entities.Bitcoin;
-import momomo.com.example.app.crypto.entities.Etherum;
-import momomo.com.example.app.crypto.entities.Polkadot;
-import momomo.com.example.app.crypto.entities.Stellar;
+import momomo.com.example.app.entities.Bitcoin;
+import momomo.com.example.app.entities.Etherum;
+import momomo.com.example.app.entities.Polkadot;
+import momomo.com.example.app.entities.Stellar;
 
 public class Main {
     

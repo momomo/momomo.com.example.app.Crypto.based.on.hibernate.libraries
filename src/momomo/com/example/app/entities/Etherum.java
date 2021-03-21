@@ -1,4 +1,4 @@
-package momomo.com.example.app.crypto.entities;
+package momomo.com.example.app.entities;
 
 
 import lombok.AccessLevel;
@@ -9,7 +9,7 @@ import momomo.com.db.$TransactionHibernate;
 import momomo.com.db.$TransactionOptions;
 import momomo.com.db.$TransactionOptionsHibernate;
 import momomo.com.db.entities.$Entity;
-import momomo.com.example.app.crypto.Crypto;
+import momomo.com.example.app.Crypto;
 import org.hibernate.Session;
 
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package momomo.com.example.app.crypto.entities;
+package momomo.com.example.app.entities;
 
 
 import lombok.AccessLevel;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import momomo.com.db.entities.$EntityIdUUID;
-import momomo.com.example.app.crypto.Crypto;
+import momomo.com.example.app.Crypto;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -44,8 +44,8 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
          * Our insert from previous example rewritten in this 'nicer' way
          * 
          * Also 
-         * @see momomo.com.example.app.crypto.entities.Bitcoin.Service#insert(java.sql.Timestamp, double) 
-         * @see momomo.com.example.app.crypto.entities.Etherum.Service#insert(java.sql.Timestamp, double) 
+         * @see momomo.com.example.app.entities.Bitcoin.Service#insert(java.sql.Timestamp, double) 
+         * @see momomo.com.example.app.entities.Etherum.Service#insert(java.sql.Timestamp, double) 
          */
         public Stellar insert(Timestamp time, double usd) {
             return save( create().setTime(time).setUsd(usd) ); // create will create the entity for us provide a standard zero arg constructor on Stellar.java

@@ -1,4 +1,4 @@
-package momomo.com.example.app.crypto;
+package momomo.com.example.app;
 
 import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$TransactionalHibernate;
@@ -48,7 +48,7 @@ public class CryptoClassAlternativeWithMinimalSetup {
     
         @Override protected String[] packages() {
             return new String[]{
-                "momomo/com/example/app/crypto/entities" 
+                "momomo/com/example/app/entities" 
             };
         }
     

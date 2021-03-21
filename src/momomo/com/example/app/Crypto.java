@@ -1,4 +1,4 @@
-package momomo.com.example.app.crypto;
+package momomo.com.example.app;
 
 import momomo.com.IO;
 import momomo.com.Is;
@@ -10,7 +10,7 @@ import momomo.com.db.$TransactionalHibernate;
 import momomo.com.db.$SessionConfig;
 import momomo.com.db.entities.$EntityId;
 import momomo.com.db.sessionfactory.$SessionFactoryRepositoryHibernate;
-import momomo.com.example.app.crypto.entities.Bitcoin;
+import momomo.com.example.app.entities.Bitcoin;
 import org.hibernate.SessionFactory;
 import org.hibernate.tool.schema.TargetType;
 
@@ -99,7 +99,7 @@ public class Crypto {
         @Override protected String[] packages() {
             // The packages we wish to scan for entities
             return new String[]{
-                "momomo/com/example/app/crypto/entities"    // The package to scan 
+                "momomo/com/example/app/entities"    // The package to scan 
             };
         }
         
@@ -222,9 +222,9 @@ public class Crypto {
      * 
      * See within the entities. 
      * 
-     * {@link momomo.com.example.app.crypto.entities.Etherum.Service}
-     * {@link momomo.com.example.app.crypto.entities.Polkadot.Service}
-     * {@link momomo.com.example.app.crypto.entities.Stellar.Service}
+     * {@link momomo.com.example.app.entities.Etherum.Service}
+     * {@link momomo.com.example.app.entities.Polkadot.Service}
+     * {@link momomo.com.example.app.entities.Stellar.Service}
      */
     public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate {
         @Override public $SessionFactoryRepositoryHibernate repository() { 

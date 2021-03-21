@@ -27,6 +27,20 @@ But now we believe this is the beginning of an entire application platform comin
 
 ### Guide
 
+The entire thing is really much much simpler to understand and navigate if you just check out the **repository**, **navigate and/or run** the examples. But we will try to guide you here.
+
+We've decided to develope a **Crypto** related application! 
+
+* **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)**  
+Think of this class as your main application class.   
+If you where developing a **Tv** application, maybe you would have a **`Tv.java`**.  
+If you where developing a **Store**, maybe you would have a **`Store.java`**.  
+If you where developing a **Finance**, maybe you would have a **`Finance.java`**.  
+&nbsp;  
+Now, we've put for simplicity **everything** that is related to configuration or setups, or access to anything inside this class, **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)**.   
+**[`Just visit it!`](src/momomo/com/example/app/Crypto.java)**. Things like our       
+  
+  
 
 
 

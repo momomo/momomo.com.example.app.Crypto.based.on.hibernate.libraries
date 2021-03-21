@@ -1,4 +1,4 @@
-package momomo.com.example.app.crypto.entities;
+package momomo.com.example.app.entities;
 
 
 import lombok.AccessLevel;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import momomo.com.db.entities.$EntityIdLong;
-import momomo.com.example.app.crypto.Crypto;
+import momomo.com.example.app.Crypto;
 import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.Column;
