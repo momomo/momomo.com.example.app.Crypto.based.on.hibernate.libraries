@@ -56,5 +56,4 @@ public class CryptoMinimalWithoutCommentsAndExamples {
             return new Params().export(export -> export.target(TargetType.DATABASE));
         }
     }
-    
 }
