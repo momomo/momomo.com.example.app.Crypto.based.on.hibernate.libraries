@@ -11,7 +11,7 @@ import org.hibernate.tool.schema.TargetType;
  * This just represents the minimal viable code 
  * @author Joseph S.
  */
-public class CryptoClassAlternativeWithMinimalSetup {
+public class CryptoMinimalWithoutCommentsAndExamples {
     
     /////////////////////////////////////////////////////////////////////
     
