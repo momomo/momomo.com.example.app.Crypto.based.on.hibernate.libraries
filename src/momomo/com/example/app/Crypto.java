@@ -37,7 +37,7 @@ public class Crypto {
      *         ... 
      *      }) 
      *
-     *           looks better than
+     *         --- looks better than ---
      *
      *      Crypto.R.requireTransaction(()-> {
      *
