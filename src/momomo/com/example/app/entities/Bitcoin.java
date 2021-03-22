@@ -43,8 +43,8 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
      * Represents the service to be used when perfoming table operations on the Bitcoin table as to separate the 
      * declaration of the entity from logic applied to it in order to keep the entity Bitcoin clean.  
      */
-    public static final Service S = new Service(); public static final class Service {
-        
+    public static final Service S = new Service(); public static final class Service { private Service(){}
+
         /**
          * Also 
          * @see Etherum.Service#insert(java.sql.Timestamp, double)

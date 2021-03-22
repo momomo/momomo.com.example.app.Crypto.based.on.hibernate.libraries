@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import momomo.com.db.entities.$EntityIdLong;
+import momomo.com.db.entities.$EntityIdUUID;
 import momomo.com.example.app.Crypto;
 import org.hibernate.criterion.Restrictions;
 
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = Polkadot.Cons.table)
-public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Polkadot extends $EntityIdLong {
+public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Polkadot extends $EntityIdUUID {
     
     @Column(name = Cons.time) 
     private Timestamp time;
@@ -70,6 +70,8 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 
                 return super.save(entity);   
             });
+            
+            
         }
         
         /**

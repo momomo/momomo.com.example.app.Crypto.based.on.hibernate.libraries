@@ -120,7 +120,7 @@ private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConf
 private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
 ```    
 
-The classes used `CryptoRepository`, `CryptoDatabase`, `CryptoSessionConfig` can all be found declared within **[`Crypto.java`](https://github.com/momomo/momomo.com.example.app.Crypto/blob/master/src/momomo/com/example/app/Crypto.java)**.   
+The classes used `CryptoRepository`, `CryptoDatabase`, `CryptoSessionConfig` can all be found declared within **[`Crypto.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)**.   
 Same smaller versions of them as exists in **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)**.
 
 ----
@@ -191,7 +191,7 @@ The save implementation could really be your own normal logic. If you use Spring
 
 We have here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` and ensure that it was generated an id as it should.
 
->> Note, to be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/blob/master/src/momomo/com/db/%24Entity.java) interface.   
+>> Note, to be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/tree/master/src/momomo/com/db/entities/$Entity.java) interface.   
 >> We can see that this is no longer really required as the interface is empty, but was a safe mechanism for our internal code, and we will eventually remove this requirement from our `Repository` implementation.
 >> The Transactional API does not have that requirement, but the repository.save(..), repository.find(...) do currently.    
 
@@ -435,7 +435,7 @@ Crypto.repository.requireOptions()
 
 Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made prettier by 
 creating a   
-`class `[`CryptoService<T extends EntityId>`](src/momomo/com/example/app/Crypto.java#L203)` extends `[`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/%24Service.java)` implements `[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/blob/master/src/momomo/com/db/%24TransactionalHibernate.java)` {...}`
+`class `[`CryptoService<T extends EntityId>`](src/momomo/com/example/app/Crypto.java#L203)` extends `[`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/$Service.java)` implements `[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)` {...}`
 
 We've done so, inside, at the bottom of **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation really simple:
 
@@ -449,8 +449,18 @@ public static abstract class CryptoService<T extends $EntityId> extends $Service
 
 We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)**
 
+A couple of changes have happend from the `Bitcoin` and `Etherum` classes. 
 
-
+   1. We've gotten rid of the `@Id private UUID id;` seen inside `Bitcoin` class as well set the setter inside the `insert()` method from `Bitcoin` class.   
+   Instead our entity implements [`$EntityIdUUID`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/entities/$EntityIdUUID.java) which will provide and generate one for us automatically.
+   
+   2. The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` `Crypto.CryptoService` as `public static final class Service extends Crypto.CryptoService<Polkadot> { ... }`  
+   There is nothing to implement as everything required is already implemented by `Crypto.CryptService` which only provides the `Crypto.repository` to use.
+   
+   3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following 
+   
+   [![IO.java](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.platform.Lambda/graphics/example.io.2021.03.04.v2.jpg?raw=true)](test/momomo/com/platform/Lambda/examples/IO.java)   
+   
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
