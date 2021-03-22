@@ -330,7 +330,7 @@ try {
         throw new IOException();
     });
 } catch (IOException exception) {
-    // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+    // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. If there is a rollback exception, a $DatabaseRollbackException will be thrown instead. Will not commit.  
 }
 ```
 
@@ -344,7 +344,7 @@ try {
         return new File("");
     });
 } catch (IOException exception) {
-    // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+    // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. If there is a rollback exception, a $DatabaseRollbackException will be thrown instead. Will not commit.
 }
 ```
 

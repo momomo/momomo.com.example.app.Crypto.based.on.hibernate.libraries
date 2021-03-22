@@ -154,7 +154,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                     throw new IOException();
                 });
             } catch (IOException exception) {
-                // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+                // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. If there is a rollback exception, a $DatabaseRollbackException will be thrown instead. Will not commit.
             }
     
             // Example k.
@@ -167,7 +167,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                     return new File("");
                 });
             } catch (IOException exception) {
-                // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+                // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. If there is a rollback exception, a $DatabaseRollbackException will be thrown instead. Will not commit.
             }
     
             // Example l. 
