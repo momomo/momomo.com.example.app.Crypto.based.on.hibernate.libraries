@@ -372,25 +372,40 @@ Crypto.repository.requireOptions()
 ```
 
 ```java                                     
-// Example n. or 
+// Example n.  
+// Similar to example m. but without chaining  
 $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
-// ... options.propagation(...) ...
+// ... options.propagation(...)
+// ... options.create().execute(...)
 ```
 
 ```java
 // Example o.
+// Similar to example m. and n. but showing that create() returns a transaction that we can execute. 
 $TransactionHibernate tx2 = Crypto.repository.requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
     .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
     .timeout(1000)
     .create()
 ;
+tx1.execute(()-> {
+    save(entity);
+});
+
+tx1.execute(()-> {
+    save(entity);
+
+    tx1.commit();
+}, false /** don't commit **/ );
 ```
 
 ```java                                      
 // Example p.
+// Similar to example m., n. and o. with all options made visibile.
 Crypto.repository.requireOptions()
     .timeout(1000)
+
+    // Notice the withConnection option being used!
     .withConnection((java.sql.Connection connection) -> {
         connection.setReadOnly(true);
         connection.setCatalog("catalog");
