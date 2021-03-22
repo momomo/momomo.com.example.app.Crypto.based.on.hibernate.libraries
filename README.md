@@ -227,7 +227,7 @@ Etherum entity = new Etherum()
 ```
 
 ```java
-// Example 1.
+// Example a.
 Crypto.repository.requireTransaction(($TransactionHibernate transaction) -> {
     // Disable autocommit, so we commit when we want or not at all
     transaction.autocommit(false);
@@ -242,7 +242,7 @@ Crypto.repository.requireTransaction(($TransactionHibernate transaction) -> {
 ```
 
 ```java
-// Example 2.
+// Example b.
 Crypto.repository.requireTransaction((tx) -> {
     tx.afterCommit(() -> {
         // Send email perhaps when we exit the transaction after succesfully committing!
@@ -257,7 +257,7 @@ Crypto.repository.requireTransaction((tx) -> {
 ```
 
 ```java 
-// Example 3.
+// Example c.
 String returns = Crypto.repository.requireTransaction(() -> {
     save(entity);
 
@@ -266,14 +266,14 @@ String returns = Crypto.repository.requireTransaction(() -> {
 ```
 
 ```java
-// 4. We repeat the return demo but by returning an entity
+// Example d. We repeat the return demo but by returning an entity
 Etherum e = Crypto.repository.requireTransaction(() -> {
     return save(entity);
 });
 ```
 
 ```java                                           
-// 5. Maybe we do not want to execute things inside the lambda block but desire more freedom? 
+// Example e. Maybe we do not want to execute things inside the lambda block but desire more freedom? 
 $TransactionHibernate tx = Crypto.repository.requireTransaction();
 save(entity);
 save(entity);
@@ -288,21 +288,21 @@ tx.commit();
 
 
 ```java
-// Example a. 
+// Example f. 
 Crypto.repository.newTransaction(() -> {
     // A new transaction is created! Not reusing an existing one if there is one!
 });
 ```
 
 ```java                                                                               
-// Example b.
+// Example g.
 Crypto.repository.supportTransaction(() -> {
     // A read only transaction is created! Writing to the database is not possible, and will result in a terrible offense!
 });
 ```
 
 ```java    
-// Example d.
+// Example h.
 Crypto.repository.newTransaction((tx) -> {
     save(entity);
 
@@ -316,7 +316,7 @@ Crypto.repository.newTransaction((tx) -> {
 
 
 ```java                                                              
-// Example e.
+// Example i.
 Crypto.repository.requireTransaction(() -> {
     save(entity);
 }, false /** commit false**/ );
@@ -324,7 +324,7 @@ Crypto.repository.requireTransaction(() -> {
 
 
 ```java                                 
-// Example f. 
+// Example j. 
 try {
     Crypto.repository.requireTransaction(() -> {
         throw new IOException();
@@ -335,7 +335,7 @@ try {
 ```
 
 ```java                       
-// Example g. 
+// Example k. 
 try {
     File file = Crypto.repository.requireTransaction(() -> {
         if ( false ) {
@@ -349,11 +349,11 @@ try {
 ```
 
 ```java                   
-// Example h. 
+// Example l. 
 Session s1 = Crypto.repository.requireSession();
 Session s2 = Crypto.repository.newSession();
 
-// Example i.
+// Example m.
 Crypto.repository.requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
     .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
@@ -371,14 +371,14 @@ Crypto.repository.requireOptions()
 
 
 ```java                                     
-// Example j. or 
+// Example n. or 
 $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
 // ... options.propagation(...) ...
 ```
 
 
 ```java
-// Example k.
+// Example o.
 $TransactionHibernate tx2 = Crypto.repository.requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
     .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
@@ -389,7 +389,7 @@ $TransactionHibernate tx2 = Crypto.repository.requireOptions()
 
 
 ```java                                      
-// Example l.
+// Example p.
 Crypto.repository.requireOptions()
     .timeout(1000)
     .withConnection((java.sql.Connection connection) -> {
@@ -416,18 +416,6 @@ Crypto.repository.requireOptions()
     })
 ;
 ```
-    
-
-
-
-
-         
-
-
-
-
-
-
 
 
 ### Contribute
