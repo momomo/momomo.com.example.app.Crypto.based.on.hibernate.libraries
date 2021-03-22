@@ -176,7 +176,7 @@ Bitcoin entity = new Bitcoin()
 ;
 ```                          
 
-The we require a write capable `transaction` which means create a `new transaction` if there is not already one ongoing for this thread, perhaps started by the caller to `insert()`. 
+The we require a write capable `transaction` which means create a `new transaction` if there is not already one ongoing for this thread, perhaps already one started by the caller to `insert()`? If not, create it.   
 
 ```
 return Crypto.repository.requireTransaction((tx) -> {
@@ -186,7 +186,7 @@ return Crypto.repository.requireTransaction((tx) -> {
 
 The `save(entity)` will execute within the `transaction` and when it terminates it will `commit the transaction`, if it was the one who `started it` and not the parent, or the parent of the parent, and so forth.
 
-The save implementation could really be your own normal logic. If you use Spring you would use whatever you where you using, if Hiberante you would do the same. 
+The **save implementation** could really be your own normal logic. If you use Spring you would use whatever you where you using, if Hiberante you would do the same. 
 
 We have here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` and ensure that it was generated an id as it should.
 
