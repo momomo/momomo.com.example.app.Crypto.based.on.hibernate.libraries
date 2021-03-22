@@ -261,31 +261,31 @@ Crypto.repository.requireTransaction((tx) -> {
 String returns = Crypto.repository.requireTransaction(() -> {
     save(entity);
 
-    return "we can return something from the transactional lambda";
+    return "we can return anything from the transactional lambda";
 });
 ```
 
 ```java
-// Example d. We repeat the return demo but by returning an entity
+// Example d.
 Etherum e = Crypto.repository.requireTransaction(() -> {
-    return save(entity);
+    return save(entity); // We repeat the return demo but by returning an entity
 });
 ```
 
 ```java                                           
-// Example e. Maybe we do not want to execute things inside the lambda block but desire more freedom? 
-$TransactionHibernate tx = Crypto.repository.requireTransaction();
+// Example e. 
+// Maybe we do not want to execute things inside the lambda block but desire more freedom? 
+$TransactionHibernate tx1 = Crypto.repository.requireTransaction();
 save(entity);
 save(entity);
 save(entity);
 save(entity);
-tx.autocommit(false);
-tx.afterCommit  (()-> {});
-tx.afterRollback(()-> { /* A crime has been committed! Report error to the FBI! */ });
-tx.rollback();
-tx.commit();
+tx1.autocommit(false);
+tx1.afterCommit  (()-> {});
+tx1.afterRollback(()-> { /* A crime has been committed! Report error to the FBI! */ });
+tx1.rollback();
+tx1.commit();
 ```
-
 
 ```java
 // Example f. 
@@ -371,13 +371,11 @@ Crypto.repository.requireOptions()
 ;
 ```
 
-
 ```java                                     
 // Example n. or 
 $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
 // ... options.propagation(...) ...
 ```
-
 
 ```java
 // Example o.
@@ -388,7 +386,6 @@ $TransactionHibernate tx2 = Crypto.repository.requireOptions()
     .create()
 ;
 ```
-
 
 ```java                                      
 // Example p.
@@ -418,7 +415,6 @@ Crypto.repository.requireOptions()
     })
 ;
 ```
-
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
