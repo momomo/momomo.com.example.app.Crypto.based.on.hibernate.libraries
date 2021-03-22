@@ -29,18 +29,6 @@ public class CryptoMinimalWithoutCommentsAndExamples {
     
     /////////////////////////////////////////////////////////////////////
     
-    public static final class CryptoDatabase implements $DatabasePostgres {
-        @Override public String name() {
-            return "crypto_database_name_in_postgres";
-        }
-        
-        @Override public String password() {
-            return "postgres"; 
-        }
-    }
-    
-    /////////////////////////////////////////////////////////////////////
-    
     public static class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
         public CryptoSessionConfig() {
             super(new CryptoDatabase());
@@ -54,6 +42,18 @@ public class CryptoMinimalWithoutCommentsAndExamples {
     
         @Override protected Params params() {
             return new Params().export(export -> export.target(TargetType.DATABASE));
+        }
+    }
+    
+    /////////////////////////////////////////////////////////////////////
+    
+    public static final class CryptoDatabase implements $DatabasePostgres {
+        @Override public String name() {
+            return "crypto_database_name_in_postgres";
+        }
+        
+        @Override public String password() {
+            return "postgres";
         }
     }
 }
