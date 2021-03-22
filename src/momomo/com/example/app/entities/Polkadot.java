@@ -70,8 +70,6 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 
                 return super.save(entity);   
             });
-            
-            
         }
         
         /**
