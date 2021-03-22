@@ -459,10 +459,14 @@ A couple of changes have happend from the `Bitcoin` and `Etherum` classes.
    
    3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following:   
    [![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/signatures.v2.2021.04.22.jpg?raw=true)
-       * We can `List<Polkadot> all = super.list()` all.
-       * We can `List<Polkadot> all = super.list( criteria().add(...) )` all.
-       * We can `List<Polkadot> all = super.list( new Polkadot().setUsd(100) )` find all that equals the price of `100 usd`. 
-       * We can `super.save(entity)`.
+       * We can `List<Polkadot> all     = super.list()` all.
+       * We can `List<Polkadot> matches = super.list( criteria().add(...) )` to find using a criteria.
+       * We can `List<Polkadot> matches = super.list(  )` find all that equals the price of `100 usd`. It will build the criteria for us.
+       * We can `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()`;  
+       * We can `Polkadot = super.findByProperty("time", Time.stamp()`;   
+       * We can `Polkadot = super.findByEntity(new Polkadot().setTime(Time.stamp()).setUsd(100.1))`;
+       * We can `super.save(entity)` to `session.saveOrUpdate()`. It will also verify the `save` was ok, since at times this won't occur such as being in a read only transaction by mistake.  
+       * We can `requireTransaction(...); newTransaction(...); supportTransaction(...); newOptions(...);`  
        
 
 ### Contribute
