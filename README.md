@@ -352,7 +352,9 @@ try {
 // Example l. 
 Session s1 = Crypto.repository.requireSession();
 Session s2 = Crypto.repository.newSession();
+```
 
+```java
 // Example m.
 Crypto.repository.requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
