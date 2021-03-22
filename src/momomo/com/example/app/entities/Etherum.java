@@ -157,7 +157,8 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
             }
     
-            // Example k. 
+            // Example k.
+            // Will bubble exceptions. 
             try {
                 File file = Crypto.repository.requireTransaction(() -> {
                     if ( false ) {
