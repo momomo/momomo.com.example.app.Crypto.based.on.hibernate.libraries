@@ -214,7 +214,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             }, false /** don't commit **/ );
     
             // Example p.
-            // Similar to example m., n. and o. with all options made visibile.
+            // Similar to example m., n. and o. with more options made visibile.
             Crypto.repository.requireOptions()
                 .timeout(1000)
         
