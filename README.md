@@ -149,8 +149,7 @@ We start by looking at our **first entity**
         * Insert method that creates a bitcoin, then requires a transaction, and then saves it within the transaction, which then commits if it was the one to start it.  
         */                  
         public Bitcoin insert(Timestamp time, double usd) {
-            
-            // This ""very very expensive"" creation need not to be inside the transaction. 
+            // This ''very very expensive'' creation need not to be inside the transaction 
             Bitcoin entity = new Bitcoin()
                 .setId(UUID.randomUUID())
                 .setTime(time)
