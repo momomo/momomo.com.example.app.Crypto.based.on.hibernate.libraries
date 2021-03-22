@@ -405,7 +405,7 @@ tx1.execute(()-> {
 Crypto.repository.requireOptions()
     .timeout(1000)
 
-    // Notice the withConnection option being used!
+    // Notice the withConnection option being used! Full access! 
     .withConnection((java.sql.Connection connection) -> {
         connection.setReadOnly(true);
         connection.setCatalog("catalog");
