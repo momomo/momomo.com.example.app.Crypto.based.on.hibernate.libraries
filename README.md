@@ -5,7 +5,7 @@
 
 ###### Example application currently mainly to showcase the Transactional API
        
-* Right now to provide an overview of the database & transactional libraries, their setups and how they are used in a completely and fully working application
+* Currently mostly provides an overview of the [`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base) & [`transactional`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate) libraries, their setups and how they are used in a completely and fully working application
     *  Requires a running `postgreSQL`
         * We might support an *in memory database* in the future for this sample application. 
 
