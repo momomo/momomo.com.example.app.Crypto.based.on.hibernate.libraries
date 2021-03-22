@@ -138,28 +138,16 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 tx.rollback();
         
                 save(entity);
-        
-                // note, an autocommit will still occur here despite the rollback 
+    
+                // note, now, the autocommit won't occur, since rollback will set commit to false as well as rolling back 
             });
     
             // Example d.
-            Crypto.repository.newTransaction((tx) -> {
-                save(entity);
-    
-    
-                tx.rollback();
-    
-                save(entity);
-        
-                // note, now, the autocommit won't occur, since cancel will set commit to false as well as rolling back
-            });
-    
-            // Example e.
             Crypto.repository.requireTransaction(() -> {
                 save(entity);
             }, false /** commit false**/ );
     
-            // Example f. 
+            // Example e. 
             try {
                 Crypto.repository.requireTransaction(() -> {
                     throw new IOException();
@@ -168,7 +156,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
             }
     
-            // Example g. 
+            // Example f. 
             try {
                 File file = Crypto.repository.requireTransaction(() -> {
                     if ( false ) {
@@ -180,11 +168,11 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
             }
     
-            // Example h. 
+            // Example g. 
             Session s1 = Crypto.repository.requireSession();
             Session s2 = Crypto.repository.newSession();
     
-            // Example i.
+            // Example h.
             Crypto.repository.requireOptions()
                 .propagation($TransactionOptions.Propagation.NEW)
                 .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
@@ -199,11 +187,11 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 })
             ;
     
-            // Example j. or 
+            // Example i. or 
             $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
             // ... options.propagation(...) ...
     
-            // Example k.
+            // Example j.
             $TransactionHibernate tx2 = Crypto.repository.requireOptions()
                 .propagation($TransactionOptions.Propagation.NEW)
                 .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
@@ -211,7 +199,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 .create()
             ;
     
-            // Example l.
+            // Example k.
             Crypto.repository.requireOptions()
                 .timeout(1000)
                 .withConnection((java.sql.Connection connection) -> {

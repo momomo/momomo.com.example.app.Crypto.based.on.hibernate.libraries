@@ -41,7 +41,7 @@ Start by looking at
   A stripped down version of it had to be provided *to showcase* how **small** a *working configuration* really is.
   
 ```java                                               
-// This is all code required!
+// This is all code required to get started!
 
 public class CryptoMinimalWithoutCommentsAndExamples {
     
@@ -301,31 +301,16 @@ Crypto.repository.supportTransaction(() -> {
 });
 ```
 
-```java               
-// Example c.
-Crypto.repository.newTransaction((tx) -> {
-    save(entity);
-
-    tx.rollback();
-
-    save(entity);
-
-    // note, an autocommit will still occur here despite the rollback 
-});
-```
-
-
 ```java    
 // Example d.
 Crypto.repository.newTransaction((tx) -> {
     save(entity);
 
-
     tx.rollback();
 
     save(entity);
 
-    // note, now, the autocommit won't occur, since cancel will set commit to false as well as rolling back
+    // note, now, the autocommit won't occur, as we have rolled back and basically discarded the entire transaction.  
 });
 ```
 
