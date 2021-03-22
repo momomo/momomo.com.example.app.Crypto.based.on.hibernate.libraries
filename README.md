@@ -433,7 +433,9 @@ Crypto.repository.requireOptions()
 
 ### Chapter three
 
-Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made prettier by creating a [`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L203) `extends` [`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/%24Service.java) `implements` [`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/blob/master/src/momomo/com/db/%24TransactionalHibernate.java)`
+Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made prettier by 
+creating a [`Crypto.CryptoService<T extends $EntityId>`](src/momomo/com/example/app/Crypto.java#L203)` extends `[`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/%24Service.java)` implements `[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/blob/master/src/momomo/com/db/%24TransactionalHibernate.java)`
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
+                                                                                                                                                                                                                                                                                                                                                               s
