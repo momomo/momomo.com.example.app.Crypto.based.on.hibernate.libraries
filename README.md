@@ -213,7 +213,7 @@ You can find plenty more examples, some very complex in **[`PublicStaticVoidMain
 
 You've now seen the **`requireTransaction(()->{})`**, let us see what else can we do.   
 
-We now take a look at pieces of the inser method inside class **[`Etherum.Service.java`](src/momomo/com/example/app/entities/Etherum.java)**
+We now take a look at pieces of the insert method inside class **[`Etherum.Service.java`](src/momomo/com/example/app/entities/Etherum.java)**
 
 
 ```java
@@ -435,7 +435,22 @@ Crypto.repository.requireOptions()
 
 Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made prettier by 
 creating a   
-[`Crypto.CryptoService<T extends EntityId>`](src/momomo/com/example/app/Crypto.java#L203)` extends `[`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/%24Service.java)` implements `[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/blob/master/src/momomo/com/db/%24TransactionalHibernate.java)`
+`class `[`CryptoService<T extends EntityId>`](src/momomo/com/example/app/Crypto.java#L203)` extends `[`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/%24Service.java)` implements `[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/blob/master/src/momomo/com/db/%24TransactionalHibernate.java)` {...}`
+
+We've done so, inside, at the bottom of **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation really simple:
+
+```java
+public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate {
+    @Override public $SessionFactoryRepositoryHibernate repository() { 
+        return Crypto.repository; // Or Crypto.R 
+    }
+}
+```                                
+
+We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)**
+
+
+
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
