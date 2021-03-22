@@ -135,40 +135,31 @@ We start by looking at our **first entity**
 ```java                                                       
 // A stripped down version of Bitcoin.java
 
-@Entity @Table(name = Bitcoin.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Bitcoin implements $Entity {
+@Entity @Table(name = Bitcoin.Cons.table) public ... final class Bitcoin implements $Entity {
     
     @Id
     private UUID      id;
     private Timestamp time;
-    private double    usd; // Represents the price in usd
-    
-    /////////////////////////////////////////////////////////////////////
-    
-    public static final class Cons {        
-        public static final String table = "bitcoin";
-    }
-    
-    /////////////////////////////////////////////////////////////////////
-    
-    public static final Service S = new Service(); public static final class Service {
-        public Bitcoin insert(Timestamp time, double usd) {
+    private double    usd; // Represents the price in usd                  
 
-            // This 'very very expensive' creation need not to be inside the transaction (just for demo)
+    ...
+    
+    public static final Service S = new Service(); public static final class Service {    
+       /** 
+        * Insert method that creates a bitcoin, then requires a transaction, and then saves it within the transaction, which then commits if it was the one to start it.  
+        */                  
+        public Bitcoin insert(Timestamp time, double usd) {
+            
+            // This ""very very expensive"" creation need not to be inside the transaction. 
             Bitcoin entity = new Bitcoin()
                 .setId(UUID.randomUUID())
                 .setTime(time)
-                .setUsd(usd)
-            ;
+                .setUsd(usd);
     
             // Now, require the transaction and execute save within, also return the saved entity. 
             return Crypto.repository.requireTransaction(() -> {
-                return save(entity);
+                return Crypto.repository.save(entity);
             });
-
-        }
-        
-        private Bitcoin save(Bitcoin entity) {
-            return Crypto.repository.save(entity);  
         }
     }
 }
@@ -190,35 +181,257 @@ The we require a write capable `transaction` which means create a `new transacti
 
 ```
 return Crypto.repository.requireTransaction((tx) -> {
-    return save(entity);
+    return Crypto.repository.save(entity);
 });
 ```                                                                                                                            
 
 The `save(entity)` will execute within the `transaction` and when it terminates it will `commit the transaction`, if it was the one who `started it` and not the parent, or the parent of the parent, and so forth.
 
-The save implementation could really be your own normal logic. 
+The save implementation could really be your own normal logic. If you use Spring you would use whatever you where you using, if Hiberante you would do the same. 
 
-If you use Spring you would use that. We have here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` and ensure that it was generated an id as it should.
+We have here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` and ensure that it was generated an id as it should.
 
-To be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/blob/master/src/momomo/com/db/%24Entity.java). We can see that this is no longer really required and we will remove this requirement eventually from our `Repository` implementation.
+>> Note, to be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/blob/master/src/momomo/com/db/%24Entity.java) interface.   
+>> We can see that this is no longer really required as the interface is empty, but was a safe mechanism for our internal code, and we will eventually remove this requirement from our `Repository` implementation.
+>> The Transactional API does not have that requirement, but the repository.save(..), repository.find(...) do currently.    
 
-We invoke this method simply as `Bitcoin.S.insert(Time.stamp(), 10000.1)` from anyplace, even a static void main. It will trigger the database generation, scan the entities, setup the `sessionFactory` and get you a transaction and eventually **save the data**.
+We now can invoke this method simply as `Bitcoin.S.insert(Time.stamp(), 10000.1)` from anyplace, even a **`static void main`** and we do: 
 
 ```java
 public static void main(String[] args){
-  Bitcoin.S.insert(Time.stamp(), 10000.1); // This will work, in case you did not believe it. From any place. Even the command line. Run or debug within your editor.   
+  Bitcoin.S.insert(Time.stamp(), 10000.1); // This will work, from any place. Even the command line, or to run or debug within your editor without any external requirements.    
 }
-```
+```                                                                                                                                      
 
-You can find more code with plenty more examples, some very complex in **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)**.
+This will **trigger** the database generation, scan the entities, setup the `sessionFactory` and get you a transaction and eventually create and **save the data** to the database.s
 
-       
+You can find plenty more examples, some very complex in **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)**.
 
 ---
 
 ### Chapter two
 
-You've now seen the `requireTransaction(()->{})` What else can we do.  
+You've now seen the **`requireTransaction(()->{})`**, let us see what else can we do.   
+
+We now take a look at pieces of the inser method inside class **[`Etherum.Service.java`](src/momomo/com/example/app/entities/Etherum.java)**
+
+
+```java
+// Given 
+
+Etherum entity = new Etherum()
+    .setId(UUID.randomUUID())
+    .setTime(time)
+    .setUsd(usd)
+;
+```
+
+```java
+// Example 1.
+Crypto.repository.requireTransaction(($TransactionHibernate transaction) -> {
+    // Disable autocommit, so we commit when we want or not at all
+    transaction.autocommit(false);
+
+    save(entity);
+    save(entity);
+    save(entity);
+    save(entity);
+
+    transaction.commit();
+});
+```
+
+```java
+// Example 2.
+Crypto.repository.requireTransaction((tx) -> {
+    tx.afterCommit(() -> {
+        // Send email perhaps when we exit the transaction after succesfully committing!
+ 
+        // We have now inserted the value in our database successfully!
+
+        // We do not want to send the email unless we actually have 100% inserted the stuff so this is a handy method to use for that 
+    });
+
+    save(entity);
+});
+```
+
+```java 
+// Example 3.
+String returns = Crypto.repository.requireTransaction(() -> {
+    save(entity);
+
+    return "we can return something from the transactional lambda";
+});
+```
+
+```java
+// 4. We repeat the return demo but by returning an entity
+Etherum e = Crypto.repository.requireTransaction(() -> {
+    return save(entity);
+});
+```
+
+```java                                           
+// 5. Maybe we do not want to execute things inside the lambda block but desire more freedom? 
+$TransactionHibernate tx = Crypto.repository.requireTransaction();
+save(entity);
+save(entity);
+save(entity);
+save(entity);
+tx.autocommit(false);
+tx.afterCommit  (()-> {});
+tx.afterRollback(()-> { /* A crime has been committed! Report error to the FBI! */ });
+tx.rollback();
+tx.commit();
+```
+
+
+```java
+// Example a. 
+Crypto.repository.newTransaction(() -> {
+    // A new transaction is created! Not reusing an existing one if there is one!
+});
+```
+
+```java                                                                               
+// Example b.
+Crypto.repository.supportTransaction(() -> {
+    // A read only transaction is created! Writing to the database is not possible, and will result in a terrible offense!
+});
+```
+
+```java               
+// Example c.
+Crypto.repository.newTransaction((tx) -> {
+    save(entity);
+
+    tx.rollback();
+
+    save(entity);
+
+    // note, an autocommit will still occur here despite the rollback 
+});
+```
+
+
+```java    
+// Example d.
+Crypto.repository.newTransaction((tx) -> {
+    save(entity);
+
+
+    tx.rollback();
+
+    save(entity);
+
+    // note, now, the autocommit won't occur, since cancel will set commit to false as well as rolling back
+});
+```
+
+
+```java                                                              
+// Example e.
+Crypto.repository.requireTransaction(() -> {
+    save(entity);
+}, false /** commit false**/ );
+```
+
+
+```java                                 
+// Example f. 
+try {
+    Crypto.repository.requireTransaction(() -> {
+        throw new IOException();
+    });
+} catch (IOException exception) {
+    // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+}
+```
+
+```java                       
+// Example g. 
+try {
+    File file = Crypto.repository.requireTransaction(() -> {
+        if ( false ) {
+            throw new IOException();
+        }
+        return new File("");
+    });
+} catch (IOException exception) {
+    // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E)
+}
+```
+
+```java                   
+// Example h. 
+Session s1 = Crypto.repository.requireSession();
+Session s2 = Crypto.repository.newSession();
+
+// Example i.
+Crypto.repository.requireOptions()
+    .propagation($TransactionOptions.Propagation.NEW)
+    .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
+    .timeout(1000)
+    .create()
+    .execute((tx)-> {
+        tx.autocommit(false);
+        tx.afterCommit(()-> {});
+        tx.afterRollback(()-> {});
+
+        // ... 
+    })
+;
+```
+
+
+```java                                     
+// Example j. or 
+$TransactionOptionsHibernate options = Crypto.repository.requireOptions();
+// ... options.propagation(...) ...
+```
+
+
+```java
+// Example k.
+$TransactionHibernate tx2 = Crypto.repository.requireOptions()
+    .propagation($TransactionOptions.Propagation.NEW)
+    .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
+    .timeout(1000)
+    .create()
+;
+```
+
+
+```java                                      
+// Example l.
+Crypto.repository.requireOptions()
+    .timeout(1000)
+    .withConnection((java.sql.Connection connection) -> {
+        connection.setReadOnly(true);
+        connection.setCatalog("catalog");
+        connection.setTransactionIsolation(1);
+        connection.clearWarnings();
+        connection.createStatement();
+        connection.setTypeMap(new HashMap<>());
+        connection.setHoldability(1);
+        connection.setSavepoint();
+        connection.setSavepoint();
+        // ...
+    })
+    .create()
+    .execute(tx -> {
+        tx.autocommit(false);
+
+        save(entity);
+        save(entity);
+        save(entity);
+
+        tx.commit();
+    })
+;
+```
+    
 
 
 
