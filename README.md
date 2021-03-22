@@ -457,10 +457,13 @@ A couple of changes have happend from the `Bitcoin` and `Etherum` classes.
    2. The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` `Crypto.CryptoService` as `public static final class Service extends Crypto.CryptoService<Polkadot> { ... }`  
    There is nothing to implement as everything required is already implemented by `Crypto.CryptService` which only provides the `Crypto.repository` to use.
    
-   3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following 
-   
-   [![IO.java](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.platform.Lambda/graphics/example.io.2021.03.04.v2.jpg?raw=true)](test/momomo/com/platform/Lambda/examples/IO.java)   
-   
+   3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following:   
+   [![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/signatures.v1.2021.04.22.jpg?raw=true)
+       * We can `List<Polkadot> all = super.list()` all.
+       * We can `List<Polkadot> all = super.list( criteria().add(...) )` all.
+       * We can `List<Polkadot> all = super.list( new Polkadot().setUsd(100) )` find all that equals the price of `100 usd`. 
+       * We can `super.save(entity)`.
+       
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
