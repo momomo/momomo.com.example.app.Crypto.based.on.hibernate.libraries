@@ -3,7 +3,8 @@
 
 ## momomo.com.example.app.Crypto
 
-###### Example application in its early days
+###### Example application currently mainly to showcase the Transactional API
+       
 * Right now to provide an overview of the database & transactional libraries, their setups and how they are used in a completely and fully working application
     *  Requires a running `postgreSQL`
         * We might support an *in memory database* in the future for this sample application. 
@@ -209,11 +210,17 @@ public static void main(String[] args){
 }
 ```
 
-You can find more code with plenty more examples, some very comples in **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)**.     
+You can find more code with plenty more examples, some very complex in **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)**.
+
+       
 
 ---
 
 ### Chapter two
+
+You've now seen the `requireTransaction(()->{})` What else can we do.  
+
+
 
 
          
