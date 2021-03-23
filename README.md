@@ -5,24 +5,24 @@
 
 ###### Example application currently mainly to showcase the Transactional API
        
-* Currently mostly provides an overview of the [`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base) & [`transactional`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate) libraries, their setups and how they are used in a completely and fully working application
+* Currently mostly provides an overview of the **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)** & **[`transactional`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)** libraries, their setups and how they are used in a completely and fully working application
     *  Requires a running `postgreSQL`
         * We might support an *in memory database* in the future for this sample application. 
 
 #### Dependencies 
-* [`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core) 
-* [`momomo.com.platform.Lambda`](https://github.com/momomo/momomo.com.platform.Lambda)
-* [`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
-* [`momomo.com.platform.db.base.jpa`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
-* [`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)
-* [`momomo.com.platform.db.base.jpa.session.with.postgres`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session.with.postgres)
-* [`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)
-* [`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)
-* [`momomo.com.platform.db.transactional.Spring`](https://github.com/momomo/momomo.com.platform.db.transactional.Spring)
+* **[`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core)** 
+* **[`momomo.com.platform.Lambda`](https://github.com/momomo/momomo.com.platform.Lambda)**
+* **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
+* **[`momomo.com.platform.db.base.jpa`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
+* **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
+* **[`momomo.com.platform.db.base.jpa.session.with.postgres`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session.with.postgres)**
+* **[`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)**
+* **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)**
+* **[`momomo.com.platform.db.transactional.Spring`](https://github.com/momomo/momomo.com.platform.db.transactional.Spring)**
 
 ### Background
 
-The major reason for this sample application was to showcase the [`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional) API. 
+The major reason for this sample application was to showcase the **[`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)** API. 
 
 But now we believe this is the beginning of an entire application platform coming as we continue to make available more and more of our libraries to the public.
 
@@ -131,7 +131,7 @@ Same smaller versions of them as exists in **[`CryptoMinimalWithoutCommentsAndEx
 
 We start by looking at our **first entity** 
 
-*[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)*
+**[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)**
 ```java                                                       
 // A stripped down version of Bitcoin.java
 
@@ -191,7 +191,7 @@ The **save call** could really be your own normal logic. If you use Spring you w
 We have here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` and ensure that it was generated an id as it should.
 
 > Note! 
-> To be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/tree/master/src/momomo/com/db/entities/$Entity.java) interface.   
+> To be able to use our repository we currently require that your `entities` implement our **[`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/tree/master/src/momomo/com/db/entities/$Entity.java)** interface.   
 > We can see that this is no longer really required as the interface is empty, but was a safe mechanism for our internal code to ensure control but we will eventually remove this requirement from our `Repository` implementation.
 > The Transactional API does not have that requirement, but the repository.save(..), repository.find(...) currently do.    
 
@@ -226,7 +226,7 @@ Etherum entity = new Etherum()
 ;
 ```                                                
 
-A rewind from the `Bitcoin` class 
+A rewind from the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class 
 
 ```java                                      
 // This you've seen from Bitcoin.java 
@@ -388,19 +388,16 @@ Crypto.repository.requireOptions()
         // ... 
     })
 ;
-```
 
-```java                                     
-// Example n.  
 // Similar to example m. but without chaining  
 $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
 // ... options.propagation(...)
 // ... options.create().execute(...)
 ```
 
+Getting a transaction that we can execute                                                                       
+
 ```java
-// Example o.
-// Similar to example m. and n. but showing that create() returns a transaction that we can execute. 
 $TransactionHibernate tx2 = Crypto.repository.requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
     .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
@@ -416,11 +413,11 @@ tx1.execute(()-> {
 
     tx1.commit();
 }, false /** don't commit **/ );
-```
+```                                      
+
+More options made visibile
 
 ```java                                      
-// Example p.
-// Similar to example m., n. and o. with more options made visibile.
 Crypto.repository.requireOptions()
     .timeout(1000)
 
@@ -452,11 +449,8 @@ Crypto.repository.requireOptions()
 
 ### Chapter three
 
-Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made prettier by 
-creating a   
-`class `[`CryptoService<T extends EntityId>`](src/momomo/com/example/app/Crypto.java#L203)` extends `[`$Service<T>`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/$Service.java)` implements `[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)` {...}`
-
-We've done so, inside, at the bottom of **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation really simple:
+Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made **prettier** by 
+creating a an inner static class **[`CryptoService`](src/momomo/com/example/app/Crypto.java#L203)** **at the bottom** **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation **being really simple**, and **minimal**:
 
 ```java
 public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate {
@@ -464,19 +458,19 @@ public static abstract class CryptoService<T extends $EntityId> extends $Service
         return Crypto.repository; // Or Crypto.R 
     }
 }
-```                                
+```                                                        
 
-We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)**
+Link to **[`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/$Service.java)** and **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)**
 
-A couple of changes have happend from the `Bitcoin` and `Etherum` classes. 
+We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** which has gone through a *couple of changes* compared to the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** and **[`Etherum.java`](src/momomo/com/example/app/entities/Etherum.java)** classes. 
 
-   1. We've gotten rid of the `@Id private UUID id;` seen inside `Bitcoin` class as well set the setter inside the `insert()` method from `Bitcoin` class.   
+   * We've gotten rid of the `@Id private UUID id;` seen inside **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** as well set the `setId()` call in `insert()` method.   
    Instead our entity implements [`$EntityIdUUID`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/entities/$EntityIdUUID.java) which will provide and generate one for us automatically.
    
-   2. The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` `Crypto.CryptoService` as `public static final class Service extends Crypto.CryptoService<Polkadot> { ... }`  
-   There is nothing to implement as everything required is already implemented by `Crypto.CryptService` which only provides the `Crypto.repository` to use.
+   * The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L203)** so we have `Polkadot.Service extends Crypto.CryptoService<Polkadot>`  
+   There is nothing to implement as everything required is already implemented by **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L203)** which only provides the `Crypto.repository` to use.
    
-   3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following:   
+   * So what we by extending **[`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java)** is the following:   
    &nbsp;![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
       * `List<Polkadot> all     = super.list()` to list all for that table.
       * `List<Polkadot> matches = super.list( criteria().add(...) )` to find many using a criteria query.
@@ -489,7 +483,6 @@ A couple of changes have happend from the `Bitcoin` and `Etherum` classes.
       * `supportTransaction(...)`
       * `requireOptions(...)`  
       * ...         
-
 
 
 ### Contribute
