@@ -458,7 +458,7 @@ A couple of changes have happend from the `Bitcoin` and `Etherum` classes.
    There is nothing to implement as everything required is already implemented by `Crypto.CryptService` which only provides the `Crypto.repository` to use.
    
    3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following:   
-   [![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
+   &nbsp;![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
        * `List<Polkadot> all     = super.list()` to list all for that table.
        * `List<Polkadot> matches = super.list( criteria().add(...) )` to find many using a criteria query.
        * `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()` to many some using a property value.  
