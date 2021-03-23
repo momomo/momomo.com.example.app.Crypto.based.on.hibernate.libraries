@@ -125,7 +125,7 @@ Same smaller versions of them as exists in **[`CryptoMinimalWithoutCommentsAndEx
 
 ----
 
-### Demo of the `Transactional` API
+### Demonstration of the `Transactional` API
 
 ### Chapter one 
 
@@ -190,9 +190,10 @@ The **save call** could really be your own normal logic. If you use Spring you w
 
 We have here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` and ensure that it was generated an id as it should.
 
->> Note, to be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/tree/master/src/momomo/com/db/entities/$Entity.java) interface.   
->> We can see that this is no longer really required as the interface is empty, but was a safe mechanism for our internal code, and we will eventually remove this requirement from our `Repository` implementation.
->> The Transactional API does not have that requirement, but the repository.save(..), repository.find(...) do currently.    
+> Note! 
+> To be able to use our repository we currently require that your `entities` implement our [`$Entity`](https://github.com/momomo/momomo.com.platform.db.base.jpa/tree/master/src/momomo/com/db/entities/$Entity.java) interface.   
+> We can see that this is no longer really required as the interface is empty, but was a safe mechanism for our internal code to ensure control but we will eventually remove this requirement from our `Repository` implementation.
+> The Transactional API does not have that requirement, but the repository.save(..), repository.find(...) currently do.    
 
 We now can invoke this method simply as `Bitcoin.S.insert(Time.stamp(), 10000.1)` from anyplace, even a **`static void main`** and we do: 
 
@@ -457,16 +458,20 @@ A couple of changes have happend from the `Bitcoin` and `Etherum` classes.
    There is nothing to implement as everything required is already implemented by `Crypto.CryptService` which only provides the `Crypto.repository` to use.
    
    3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following:   
-   [![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/signatures.v2.2021.04.22.jpg?raw=true)
-       * We can `List<Polkadot> all     = super.list()` all.
-       * We can `List<Polkadot> matches = super.list( criteria().add(...) )` to find using a criteria.
-       * We can `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()`;  
-       * We can `Polkadot = super.findByProperty("time", Time.stamp()`;   
-       * We can `Polkadot = super.findByEntity(new Polkadot().setTime(Time.stamp()).setUsd(100.1))`; to find all that equals the price of `100 usd`. It will build the criteria for us.
-       * We can `super.save(entity)` to `session.saveOrUpdate()`. It will also verify the `save` was ok, since at times this won't occur such as being in a read only transaction by mistake.  
-       * We can `requireTransaction(...); newTransaction(...); supportTransaction(...); newOptions(...);`
-       * ...  
-       
+   [![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
+       * `List<Polkadot> all     = super.list()` to list all for that table.
+       * `List<Polkadot> matches = super.list( criteria().add(...) )` to find many using a criteria query.
+       * `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()` to many some using a property value.  
+       * `Polkadot = super.findByProperty("time", Time.stamp()` to find one using property value.   
+       * `Polkadot = super.findByEntity(new Polkadot().setTime(Time.stamp()).setUsd(100.1))`; to find one with the time stamp and price of `100` usd and will build the criteria for us.
+       * `super.save(entity)` to `session.saveOrUpdate()`. It will also verify the `save` was ok, since at times this won't occur such as being in a read only transaction by mistake.  
+       * `requireTransaction(...)` 
+       * `newTransaction(...)` 
+       * `supportTransaction(...)`
+       * `requireOptions(...)`  
+       * ...         
+
+
 
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
