@@ -459,17 +459,17 @@ A couple of changes have happend from the `Bitcoin` and `Etherum` classes.
    
    3. So what we by extending [`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java) is the following:   
    &nbsp;![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
-       * `List<Polkadot> all     = super.list()` to list all for that table.
-       * `List<Polkadot> matches = super.list( criteria().add(...) )` to find many using a criteria query.
-       * `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()` to many some using a property value.  
-       * `Polkadot = super.findByProperty("time", Time.stamp()` to find one using property value.   
-       * `Polkadot = super.findByEntity(new Polkadot().setTime(Time.stamp()).setUsd(100.1))`; to find one with the time stamp and price of `100` usd and will build the criteria for us.
-       * `super.save(entity)` to `session.saveOrUpdate()`. It will also verify the `save` was ok, since at times this won't occur such as being in a read only transaction by mistake.  
-       * `requireTransaction(...)` 
-       * `newTransaction(...)` 
-       * `supportTransaction(...)`
-       * `requireOptions(...)`  
-       * ...         
+      * `List<Polkadot> all     = super.list()` to list all for that table.
+      * `List<Polkadot> matches = super.list( criteria().add(...) )` to find many using a criteria query.
+      * `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()` to many some using a property value.  
+      * `Polkadot = super.findByProperty("time", Time.stamp()` to find one using property value.   
+      * `Polkadot = super.findByEntity(new Polkadot().setTime(Time.stamp()).setUsd(100.1))`; to find one with the time stamp and price of `100` usd and will build the criteria for us.
+      * `super.save(entity)` to `session.saveOrUpdate()`. It will also verify the `save` was ok, since at times this won't occur such as being in a read only transaction by mistake.  
+      * `requireTransaction(...)` 
+      * `newTransaction(...)` 
+      * `supportTransaction(...)`
+      * `requireOptions(...)`  
+      * ...         
 
 
 
