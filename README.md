@@ -224,25 +224,58 @@ Etherum entity = new Etherum()
     .setTime(time)
     .setUsd(usd)
 ;
+```                                                
+
+A rewind from the `Bitcoin` class 
+
+```java                                      
+// This you've seen from Bitcoin.java 
+Crypto.repository.requireTransaction(() -> {
+    return save(entity);
+});                              
 ```
 
+We can demand a new transaction regardless of an existing one
+
 ```java
-// Example a.
+Crypto.repository.newTransaction(() -> {
+    return save(entity);
+});
+
+```    
+
+A read only transaction
+
+```java
+List<Polkadot> = Crypto.repository.supportTransaction(() -> {
+    return list(); // super.list() available from the super class $Service 
+});   
+```
+
+We can disable auto commit. 
+
+```java
 Crypto.repository.requireTransaction(($TransactionHibernate transaction) -> {
     // Disable autocommit, so we commit when we want or not at all
     transaction.autocommit(false);
 
     save(entity);
-    save(entity);
-    save(entity);
-    save(entity);
 
     transaction.commit();
 });
+```                                               
+
+Another way to disable automatic commit. 
+
+```java                                                              
+Crypto.repository.requireTransaction(() -> {
+    save(entity);
+}, false /** commit false**/ );
 ```
 
+We can hook in to do something once the commit is succesful.
+
 ```java
-// Example b.
 Crypto.repository.requireTransaction((tx) -> {
     tx.afterCommit(() -> {
         // Send email perhaps when we exit the transaction after succesfully committing!
@@ -256,8 +289,17 @@ Crypto.repository.requireTransaction((tx) -> {
 });
 ```
 
+We can return something from inside the transaction.                                                         
+
+```java
+Etherum e = Crypto.repository.requireTransaction(() -> {
+    return save(entity); // We repeat the return demo but by returning an entity
+});
+```
+
+Return again, showcasing that you can return anything really.  
+
 ```java 
-// Example c.
 String returns = Crypto.repository.requireTransaction(() -> {
     save(entity);
 
@@ -265,16 +307,9 @@ String returns = Crypto.repository.requireTransaction(() -> {
 });
 ```
 
-```java
-// Example d.
-Etherum e = Crypto.repository.requireTransaction(() -> {
-    return save(entity); // We repeat the return demo but by returning an entity
-});
-```
+A lambda less example, if we do not want to execute things inside a lambda but desire more freedom?  
 
 ```java                                           
-// Example e. 
-// Maybe we do not want to execute things inside the lambda block but desire more freedom? 
 $TransactionHibernate tx1 = Crypto.repository.requireTransaction();
 save(entity);
 save(entity);
@@ -285,24 +320,11 @@ tx1.afterCommit  (()-> {});
 tx1.afterRollback(()-> { /* A crime has been committed! Report error to the FBI! */ });
 tx1.rollback();
 tx1.commit();
-```
+```          
 
-```java
-// Example f. 
-Crypto.repository.newTransaction(() -> {
-    // A new transaction is created! Not reusing an existing one if there is one!
-});
-```
-
-```java                                                                               
-// Example g.
-Crypto.repository.supportTransaction(() -> {
-    // A read only transaction is created! Writing to the database is not possible, and will result in a terrible offense!
-});
-```
+Rolling back. 
 
 ```java    
-// Example h.
 Crypto.repository.newTransaction((tx) -> {
     save(entity);
 
@@ -314,17 +336,9 @@ Crypto.repository.newTransaction((tx) -> {
 });
 ```
 
-
-```java                                                              
-// Example i.
-Crypto.repository.requireTransaction(() -> {
-    save(entity);
-}, false /** commit false**/ );
-```
-
+We show that exceptions will bubble up to the caller. 
 
 ```java                                 
-// Example j. 
 try {
     Crypto.repository.requireTransaction(() -> {
         throw new IOException();
@@ -334,8 +348,9 @@ try {
 }
 ```
 
+We can return and throw exceptions.                                                     
+
 ```java                       
-// Example k. 
 try {
     File file = Crypto.repository.requireTransaction(() -> {
         if ( false ) {
@@ -346,16 +361,20 @@ try {
 } catch (IOException exception) {
     // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. If there is a rollback exception, a $DatabaseRollbackException will be thrown instead. Will not commit.
 }
-```
+```                                 
+
+We can get access to the actual session and retain 100% control.  
 
 ```java                   
 // Example l. 
 Session s1 = Crypto.repository.requireSession();
 Session s2 = Crypto.repository.newSession();
-```
+```                                            
+
+We can build the transaction properties and set various things ourselves. 
+
 
 ```java
-// Example m.
 Crypto.repository.requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
     .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
