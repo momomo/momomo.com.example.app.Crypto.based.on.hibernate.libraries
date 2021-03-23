@@ -450,7 +450,7 @@ Crypto.repository.requireOptions()
 ### Chapter three
 
 Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made **prettier** by 
-creating a an inner static class **[`CryptoService`](src/momomo/com/example/app/Crypto.java#L203)** **at the bottom** **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation **being really simple**, and **minimal**:
+creating a an inner static class **[`CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** **at the bottom** **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation **being really simple**, and **minimal**:
 
 ```java
 public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate {
@@ -467,8 +467,8 @@ We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities
    * We've gotten rid of the `@Id private UUID id;` seen inside **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** as well set the `setId()` call in `insert()` method.   
    Instead our entity implements [`$EntityIdUUID`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/entities/$EntityIdUUID.java) which will provide and generate one for us automatically.
    
-   * The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L203)** so we have `Polkadot.Service extends Crypto.CryptoService<Polkadot>`  
-   There is nothing to implement as everything required is already implemented by **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L203)** which only provides the `Crypto.repository` to use.
+   * The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** so we have `Polkadot.Service extends Crypto.CryptoService<Polkadot>`  
+   There is nothing to implement as everything required is already implemented by **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** which only provides the `Crypto.repository` to use.
    
    * So what we by extending **[`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java)** is the following:   
    &nbsp;![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
