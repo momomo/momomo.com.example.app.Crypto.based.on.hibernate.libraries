@@ -473,5 +473,61 @@ We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities
       * ...         
 
 
+So now in **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** we have 
+
+```java
+public static final class Service extends Crypto.CryptoService<Polkadot> { ... }
+```                                                                            
+
+with rewritten **`insert()`** without the need to access **`Crypto.R`** anymore from the **`Service`**
+
+```java
+public Polkadot insert(Timestamp time, double usd) {
+    return requireTransaction(()-> {
+        // Save method and a bunch of other methods are provided for us, they delegate through the repository
+
+        Polkadot entity = new Polkadot()
+            .setTime(time)
+            .setUsd(usd)
+        ;
+        
+        // super not required, but added for clarity
+        return super.save(entity);   
+    });
+}      
+```
+
+and also added some more examples:
+
+```java
+/**
+ * Return all the historic data within polkadot table 
+ */
+public List<Polkadot> historic() {
+    return supportTransaction(()-> {
+        return super.list();
+    });
+}            
+```
+
+and 
+
+```java
+/**
+ * Return the data within time range
+**/
+public List<Polkadot> range(Timestamp from, Timestamp to) {
+    return supportTransaction(()-> {
+        return list(criteria()
+            .add( Restrictions.ge(Cons.time, from) )
+            .add( Restrictions.le(Cons.time, to  ) )
+        );
+    });
+}
+```
+
+Take a look at **[`Stellar.java`](src/momomo/com/example/app/entities/Stellar.java)** for the minimal version of what the *[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)* class could look like where the transaction is required, but without explicitly stating it. 
+The caller should know. Note that this is to reduce boiler plate. In reality all of our code no longer uses `requireTransaction` other than by the callers because the caller would know the entire transaction scope, and likely would need to wrap multiple ones to create all of the things at the same time. 
+
 ### Contribute
 Send an email to `opensource{at}momomo.com` if you would like to contribute in any way, make changes or otherwise have thoughts and/or ideas on things to improve.
