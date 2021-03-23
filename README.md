@@ -92,26 +92,15 @@ public class CryptoMinimalWithoutCommentsAndExamples {
 ```  
    
   
-  Now that you've seen it, glanced it, consumed it, you may ***proceed***. 
+Now that you've seen it, glanced it, consumed it, you may ***proceed***.
 
-* We would not want to use something obtrusive as **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)** and don't want to scare you off, so we actually use:  
+---
 
-  **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)**
-  
-  Think of this class as your ***main application class*** where we put say things **global** to the application, often `final` and something any class might want to access. 
-      
-    If you where developing a **Tv** application, maybe you would have a **`Tv.java`**  
-    If you where developing a **Store**, maybe you would have a **`Store.java`**  
-    If you where developing a **Finance**, maybe you would have a **`Finance.java`**  
-    &nbsp;  
-    Now, for simplicity we've put **everything** that is related to *configuration or setups** inside the class **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)**.    
-    
-    There is not really that much in it, not more than **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)**.  
-        
-    But there is lots of **comments and examples of code** that's disabled.   
-----
+We would not want to use something named so obtrusively as **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)** and we ensure you we don't. 
 
-**This is what we setup**.   
+Our main class is actually called **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** which is a decent name for our main application class and there is much in it, not more than **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)**, but there is lots of **comments**, **examples** and **disabled** code.
+     
+And this is **what we setup**.   
 
 ```java
 public  static final CryptoRepository    R               = new CryptoRepository   (); // Not used other than at the bottom of this file! Can you find it?
@@ -120,10 +109,9 @@ private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConf
 private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
 ```    
 
-The classes used `CryptoRepository`, `CryptoDatabase`, `CryptoSessionConfig` can all be found declared within **[`Crypto.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)**.   
-Same smaller versions of them as exists in **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)**.
+The classes used `CryptoRepository`, `CryptoDatabase`, `CryptoSessionConfig` can all be found declared within **[`Crypto.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)**. Same smaller / compact versions of them as exists in **[`CryptoMinimalWithoutCommentsAndExamples.java`](src/momomo/com/example/app/CryptoMinimalWithoutCommentsAndExamples.java)** as already mentioned.
 
-----
+---
 
 ### Demonstration of the `Transactional` API
 
