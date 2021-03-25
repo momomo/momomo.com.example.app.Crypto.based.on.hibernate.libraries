@@ -300,9 +300,6 @@ A lambda less example, if we do not want to execute things inside a lambda but d
 ```java                                           
 $TransactionHibernate tx1 = Crypto.repository.requireTransaction();
 save(entity);
-save(entity);
-save(entity);
-save(entity);
 tx1.autocommit(false);
 tx1.afterCommit  (()-> {});
 tx1.afterRollback(()-> { /* A crime has been committed! Report error to the FBI! */ });
@@ -419,15 +416,12 @@ Crypto.repository.requireOptions()
         connection.setTypeMap(new HashMap<>());
         connection.setHoldability(1);
         connection.setSavepoint();
-        connection.setSavepoint();
         // ...
     })
     .create()
     .execute(tx -> {
         tx.autocommit(false);
 
-        save(entity);
-        save(entity);
         save(entity);
 
         tx.commit();
