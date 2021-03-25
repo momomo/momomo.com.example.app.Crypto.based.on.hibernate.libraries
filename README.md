@@ -115,7 +115,7 @@ The classes used `CryptoRepository`, `CryptoDatabase`, `CryptoSessionConfig` can
 
 ### Demonstration of the `Transactional` API
 
-### Chapter one 
+### Part one 
 
 We start by looking at our **first entity** 
 
@@ -197,7 +197,7 @@ You can find plenty more examples, some very complex in **[`PublicStaticVoidMain
 
 ---
 
-### Chapter two
+### Part two
 
 You've now seen the **`requireTransaction(()->{})`**, let us see what else can we do.   
 
@@ -435,7 +435,7 @@ Crypto.repository.requireOptions()
 ;
 ```                            
 
-### Chapter three
+### Part three
 
 Now that you have seen plenty of examples of what can be done, we now focus on showing how things can be made **prettier** by 
 creating a an inner static class **[`CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** **at the bottom** **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation **being really simple**, and **minimal**:
@@ -550,7 +550,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
 
 Here we no longer use `requireTransaction()` because we put that burden for the caller to know to reduce boiler plate. In reality all of our code no longer uses `requireTransaction` other than by the callers because the caller would know the entire transaction scope and likely would need to wrap multiple ones to create all of the things at the same time.
 
-#### Chapter four
+#### Part four
 
 If we now look at **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)** we can find a `static void main` and some code ready to run the entire thing.
 
