@@ -9,7 +9,7 @@
     *  Requires a running `postgreSQL`
         * We might support an *in memory database* in the future for this sample application. 
 
-#### Dependencies 
+### Dependencies 
 * **[`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core)** 
 * **[`momomo.com.platform.Lambda`](https://github.com/momomo/momomo.com.platform.Lambda)**
 * **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
