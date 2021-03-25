@@ -582,7 +582,7 @@ public class PublicStaticVoidMain {
     }
     
     private static void polkadot(int mul) {
-        // See the Polkadot entity file to see the recommended way we suggest you use with a base service for your application
+        // Multiple transactions
         Polkadot.S.insert(Time.stamp(), mul * 1001);
         Polkadot.S.insert(Time.stamp(), mul * 1002);
         Polkadot.S.insert(Time.stamp(), mul * 1003);
