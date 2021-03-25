@@ -20,6 +20,8 @@
 * **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)**
 * **[`momomo.com.platform.db.transactional.Spring`](https://github.com/momomo/momomo.com.platform.db.transactional.Spring)**
 
+---
+
 ### Background
 
 The major reason for this sample application was to showcase the **[`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)** API. 
