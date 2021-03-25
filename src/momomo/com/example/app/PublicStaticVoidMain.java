@@ -3,51 +3,27 @@ package momomo.com.example.app;
 import momomo.com.Time;
 import momomo.com.db.$TransactionHibernate;
 import momomo.com.example.app.entities.Bitcoin;
-import momomo.com.example.app.entities.Etherum;
 import momomo.com.example.app.entities.Polkadot;
 import momomo.com.example.app.entities.Stellar;
 
+/**
+ * @author Joseph S.
+ */
 public class PublicStaticVoidMain {
     
     public static void main(String[] args) {
-        // supportTransaction won't populate, read only!    
-        //  ERROR: cannot execute INSERT in a read-only transaction
-        Crypto.repository.supportTransaction(($TransactionHibernate txG) -> {
-            /*Stellar.S.insert(Time.stamp(), mul * 901);
-            Stellar.S.insert(Time.stamp(), mul * 902);
-            Stellar.S.insert(Time.stamp(), mul * 903);
-            Stellar.S.insert(Time.stamp(), mul * 904);
-            Stellar.S.insert(Time.stamp(), mul * 905);*/
-        
-            Crypto.repository.requireTransaction(($TransactionHibernate txF) -> {
-                Stellar.S.insert(Time.stamp(), 1 * 601);
-                Stellar.S.insert(Time.stamp(), 1 * 602);
-                Stellar.S.insert(Time.stamp(), 1 * 603);
-                Stellar.S.insert(Time.stamp(), 1 * 604);
-                Stellar.S.insert(Time.stamp(), 1 * 605);
-            });
-            
-        });
-        
-        if ( true  ) return; 
         bitcoin(1);
-        etherum(1);
         polkadot(1);
         stellar(1);
-        
-        if ( true ) return;
-        
-        // All in one and same transaction!
-        $TransactionHibernate tx = Crypto.repository.requireTransaction();
-        bitcoin(2);
-        etherum(2);
-        polkadot(2);
-        stellar(2);
-        
-        tx.rollback();
-
-        /*polkadot();
-        stellar();*/
+    
+        {
+            $TransactionHibernate tx = Crypto.repository.requireTransaction();
+    
+            bitcoin(10);
+            polkadot(10);
+    
+            tx.rollback();      // We roll back!
+        }
     }
     
     private static void bitcoin(int mul) {
@@ -59,15 +35,6 @@ public class PublicStaticVoidMain {
         Bitcoin.S.insert(Time.stamp(), mul * 100005);
     }
     
-    private static void etherum(int mul) {
-        // Multiple transactions, won't actually insert anything as insert only contains examples
-        Etherum.S.insert(Time.stamp(), mul * 10001);
-        Etherum.S.insert(Time.stamp(), mul * 10002);
-        Etherum.S.insert(Time.stamp(), mul * 10003);
-        Etherum.S.insert(Time.stamp(), mul * 10004);
-        Etherum.S.insert(Time.stamp(), mul * 10005);
-    }
-    
     private static void polkadot(int mul) {
         // See the Polkadot entity file to see the recommended way we suggest you use with a base service for your application
         Polkadot.S.insert(Time.stamp(), mul * 1001);
@@ -77,6 +44,10 @@ public class PublicStaticVoidMain {
         Polkadot.S.insert(Time.stamp(), mul * 1005);
     }
     
+    /**
+     * Bunch of complex and nested transaction! 
+     * Take a look at the comments!
+     */
     private static void stellar(int mul) {
         // One transaction
         Crypto.repository.newTransaction((txA) -> {
@@ -154,8 +125,5 @@ public class PublicStaticVoidMain {
                 });
             });
         });
-    
-        
     }
-    
 }

@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import momomo.com.Randoms;
 import momomo.com.db.entities.$Entity;
 import momomo.com.example.app.Crypto;
 
@@ -12,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 /**
  * Simple sample entity 
@@ -24,7 +24,7 @@ import java.util.UUID;
 public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Bitcoin implements $Entity {
     
     @Id
-    private UUID      id;
+    private Long      id;
     private Timestamp time;
     private double    usd; // Represents the price in usd
     
@@ -53,7 +53,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
         public Bitcoin insert(Timestamp time, double usd) {
             // This 'very very expensive' creation need not to be inside the transaction (just for demo)
             Bitcoin entity = new Bitcoin()
-                .setId(UUID.randomUUID())
+                .setId(Randoms.Long())
                 .setTime(time)
                 .setUsd(usd);
     
