@@ -50,7 +50,7 @@ public class PublicStaticVoidMain {
      */
     private static void stellar(int mul) {
         // One transaction
-        Crypto.repository.newTransaction((txA) -> {
+        Crypto.repository.newTransaction((tx1) -> {
             Stellar.S.insert(Time.stamp(), mul * 101);
             Stellar.S.insert(Time.stamp(), mul * 102);
             Stellar.S.insert(Time.stamp(), mul * 103);
@@ -58,7 +58,7 @@ public class PublicStaticVoidMain {
             Stellar.S.insert(Time.stamp(), mul * 105);
     
             // Start a new transaction within
-            Crypto.repository.newTransaction(txB -> {
+            Crypto.repository.newTransaction(tx2 -> {
                 Stellar.S.insert(Time.stamp(), mul * 201);
                 Stellar.S.insert(Time.stamp(), mul * 202);
                 Stellar.S.insert(Time.stamp(), mul * 203);
@@ -66,7 +66,7 @@ public class PublicStaticVoidMain {
                 Stellar.S.insert(Time.stamp(), mul * 205);
     
                 // Another one
-                Crypto.repository.newTransaction(txC -> {
+                Crypto.repository.newTransaction(tx3 -> {
                     Stellar.S.insert(Time.stamp(), mul * 301);
                     Stellar.S.insert(Time.stamp(), mul * 302);
                     Stellar.S.insert(Time.stamp(), mul * 303);
@@ -74,8 +74,8 @@ public class PublicStaticVoidMain {
                     Stellar.S.insert(Time.stamp(), mul * 305);
                 });
     
-                // Continue on the previous last active one (same as txB) 
-                Crypto.repository.requireTransaction(txD -> {
+                // Continue on the previous last active one (same as tx2) 
+                Crypto.repository.requireTransaction(tx4 -> {
                     Stellar.S.insert(Time.stamp(), mul * 401);
                     Stellar.S.insert(Time.stamp(), mul * 402);
                     Stellar.S.insert(Time.stamp(), mul * 403);
@@ -84,18 +84,18 @@ public class PublicStaticVoidMain {
                 });
                 
                 // Neither 201 ... or 401 ... will get into db since that tx rolledback
-                txB.rollback();
+                tx2.rollback();
                 
-                // The same as txA, no issues there. Should be in.   
-                Crypto.repository.requireTransaction(txE -> {
+                // The same as tx1, no issues there. Should be in.   
+                Crypto.repository.requireTransaction(tx5 -> {
                     Stellar.S.insert(Time.stamp(), mul * 501);
                     Stellar.S.insert(Time.stamp(), mul * 502);
                     Stellar.S.insert(Time.stamp(), mul * 503);
                     Stellar.S.insert(Time.stamp(), mul * 504);
                     Stellar.S.insert(Time.stamp(), mul * 505);
     
-                    // The same as txA and txE, no issues there. Should enter db.    
-                    Crypto.repository.requireTransaction(($TransactionHibernate txF) -> {
+                    // The same as tx1 and tx5, no issues there. Should enter db.    
+                    Crypto.repository.requireTransaction(($TransactionHibernate tx6) -> {
                         Stellar.S.insert(Time.stamp(), mul * 601);
                         Stellar.S.insert(Time.stamp(), mul * 602);
                         Stellar.S.insert(Time.stamp(), mul * 603);
@@ -103,7 +103,7 @@ public class PublicStaticVoidMain {
                         Stellar.S.insert(Time.stamp(), mul * 605);
     
                         // New transaction, will be in    
-                        Crypto.repository.newTransaction(($TransactionHibernate txG) -> {
+                        Crypto.repository.newTransaction(($TransactionHibernate tx7) -> {
                             Stellar.S.insert(Time.stamp(), mul * 701);
                             Stellar.S.insert(Time.stamp(), mul * 702);
                             Stellar.S.insert(Time.stamp(), mul * 703);
@@ -112,14 +112,14 @@ public class PublicStaticVoidMain {
                         });
     
                         // New transaction, won't be in    
-                        Crypto.repository.newTransaction(($TransactionHibernate txH) -> {
+                        Crypto.repository.newTransaction(($TransactionHibernate tx8) -> {
                             Stellar.S.insert(Time.stamp(), mul * 801);
                             Stellar.S.insert(Time.stamp(), mul * 802);
                             Stellar.S.insert(Time.stamp(), mul * 803);
                             Stellar.S.insert(Time.stamp(), mul * 804);
                             Stellar.S.insert(Time.stamp(), mul * 805);
                             
-                            txH.rollback();
+                            tx8.rollback();
                         });
                     });
                 });
