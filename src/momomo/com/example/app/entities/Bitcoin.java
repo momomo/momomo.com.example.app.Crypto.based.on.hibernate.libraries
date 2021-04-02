@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import momomo.com.Randoms;
+import momomo.com.Time;
 import momomo.com.db.entities.$Entity;
 import momomo.com.example.app.Crypto;
 
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 
 /**
- * Simple sample entity 
+ * Simple sample entity.  
  * 
  * @author Joseph S.
  */
@@ -44,7 +45,9 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
      * declaration of the entity from logic applied to it in order to keep the entity Bitcoin clean.  
      */
     public static final Service S = new Service(); public static final class Service { private Service(){}
-
+        
+        /////////////////////////////////////////////////////////////////////
+    
         /**
          * Also 
          * @see Etherum.Service#insert(java.sql.Timestamp, double)
@@ -57,13 +60,10 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 .setTime(time)
                 .setUsd(usd);
     
-            // Now, require the transaction and execute save within, also return the saved entity. 
-            return Crypto.repository.requireTransaction((tx) -> {
-                return save(entity);
-            });
-            
-            // We should now 100% have a new row in the table bitcoin!
+            return save(entity);
         }
+        
+        /////////////////////////////////////////////////////////////////////
         
         /**
          * Save your entity here anyway you would normally do!
@@ -76,8 +76,25 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
          * 
          */
         private Bitcoin save(Bitcoin entity) {
-            return Crypto.repository.save(entity);  // OR Crypto.repository.session().save(entity); OR Crypto.repository.session().saveOrUpdate(entity);
+            return Crypto.REPOSITORY.save(entity);  // OR Crypto.repository.session().save(entity); OR Crypto.repository.session().saveOrUpdate(entity);
         }
+        
+        /////////////////////////////////////////////////////////////////////
+        
+        public void populate(int mul) {
+            // All in one transaction 
+            Crypto.TRANSACTIONAL.requireTransaction(() -> {
+                insert(Time.stamp(), mul * 100001);
+                insert(Time.stamp(), mul * 100002);
+                insert(Time.stamp(), mul * 100003);
+                insert(Time.stamp(), mul * 100004);
+                insert(Time.stamp(), mul * 100005);
+            });
+    
+            // We should now 100% have new rows in the table bitcoin!
+        }
+        
+        /////////////////////////////////////////////////////////////////////
     }
     
 }

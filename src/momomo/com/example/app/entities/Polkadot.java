@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import momomo.com.Time;
 import momomo.com.db.entities.$EntityIdUUID;
 import momomo.com.example.app.Crypto;
 import org.hibernate.criterion.Restrictions;
@@ -24,9 +25,7 @@ import java.util.List;
 @Table(name = Polkadot.Cons.table)
 public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Polkadot extends $EntityIdUUID {
     
-    @Column(name = Cons.time) 
     private Timestamp time;
-    @Column(name = Cons.usd ) 
     private double    usd;     // Represents the price in usd
     
     /////////////////////////////////////////////////////////////////////
@@ -35,21 +34,21 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
      * We separate constants and transient things from the main entity to keep the entity Polkadot clean
      */
     public static final class Cons {
-        public static final String table = "polkadot";
-        public static final String time  = "time";
-        public static final String usd   = "usd";
+        public static final String table = "polkadot", time = "time", usd = "usd";
     }
-    
-    /////////////////////////////////////////////////////////////////////
     
     /////////////////////////////////////////////////////////////////////
     
     /**
      * Represents the service to be used when perfoming table operations on the Polkadot table as to separate the 
      * declaration of the entity from logic applied to it in order to keep the entity Polkadot clean.  
+     * 
+     * Note! We extend {@link momomo.com.example.app.Crypto.CryptoService} here!
      */
     public static final Service S = new Service(); public static final class Service extends Crypto.CryptoService<Polkadot> { private Service(){}
-
+        
+        /////////////////////////////////////////////////////////////////////
+        
         /**
          * Our insert from previous example rewritten in this 'nicer' way
          * 
@@ -61,34 +60,35 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
              // Note, we do not need to access Crypto.R anymore inside this Service
             
             return requireTransaction(()-> {
-                // And save method and a bunch of other methods are provided for us, they delegate through the repository
-                // super not required, but added for clarity
                 Polkadot entity = new Polkadot()
                     .setTime(time)
                     .setUsd(usd)
                 ;
                 
-                return super.save(entity);   
+                return super.save(entity);   // super not required, but added for clarity   
             });
         }
         
-        /**
-         * Return all the historic data within polkadot table 
-         */
-        public List<Polkadot> historic() {
-            return supportTransaction(()-> {
-                return super.list();
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+        
+        public void populate(int mul) {
+            // Multiple transactions each started inside the insert method
+            insert(Time.stamp(), mul * 1001);
+            insert(Time.stamp(), mul * 1002);
+            insert(Time.stamp(), mul * 1003);
+            
+            // Two at once, insert call will just continue using this created transaction
+            requireTransaction(()-> {
+                insert(Time.stamp(), mul * 1004);
+                insert(Time.stamp(), mul * 1005);
             });
         }
         
-        public List<Polkadot> range(Timestamp from, Timestamp to) {
-            return supportTransaction(()-> {
-                return list(criteria()
-                    .add( Restrictions.ge(Cons.time, from) )
-                    .add( Restrictions.le(Cons.time, to  ) )
-                );
-            });
-        }
-        
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////
     }
 }

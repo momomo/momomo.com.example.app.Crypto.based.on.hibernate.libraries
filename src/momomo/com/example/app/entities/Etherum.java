@@ -8,18 +8,16 @@ import lombok.experimental.Accessors;
 import momomo.com.db.$TransactionHibernate;
 import momomo.com.db.$TransactionOptions;
 import momomo.com.db.$TransactionOptionsHibernate;
-import momomo.com.db.entities.$Entity;
+import momomo.com.db.entities.$EntityIdUUID;
 import momomo.com.example.app.Crypto;
 import org.hibernate.Session;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * Simple sample entity 
@@ -28,10 +26,8 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = Etherum.Cons.table)
-public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Etherum implements $Entity {
+public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Etherum extends $EntityIdUUID {
     
-    @Id
-    private UUID      id;
     private Timestamp time;
     private double    usd; // Represents the price in usd
     
@@ -49,9 +45,11 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
     /**
      * Represents the service to be used when perfoming table operations on the Etherum table as to separate the 
      * declaration of the entity from logic applied to it in order to keep the entity Etherum clean.  
+     * 
+     * Note! We extend {@link momomo.com.example.app.Crypto.CryptoService} here!
      */
-    public static final Service S = new Service(); public static final class Service { private Service(){}
-        
+    public static final Service S = new Service(); public static final class Service extends Crypto.CryptoService<Etherum> { private Service(){}
+    
         /**
          * Just a bunch of examples, nothing of it is executed
          * 
@@ -62,26 +60,22 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
         public Etherum insert(Timestamp time, double usd) {  if ( true ) return null;
         
             Etherum entity = new Etherum()
-                .setId(UUID.randomUUID())
                 .setTime(time)
                 .setUsd(usd)
             ;
             
             // Example a.
-            Crypto.repository.requireTransaction(($TransactionHibernate transaction) -> {
+            requireTransaction(($TransactionHibernate transaction) -> {
                 // Disable autocommit, so we commit when we want or not at all
                 transaction.autocommit(false);
         
-                save(entity);
-                save(entity);
-                save(entity);
                 save(entity);
         
                 transaction.commit();
             });
     
             // Example b.
-            Crypto.repository.requireTransaction((tx) -> {
+            requireTransaction((tx) -> {
                 tx.afterCommit(() -> {
                     // Send email perhaps when we exit the transaction after succesfully committing!
                     
@@ -94,23 +88,20 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             });
     
             // Example c.
-            String returns = Crypto.repository.requireTransaction(() -> {
+            String returns = requireTransaction(() -> {
                 save(entity);
     
-                return "we can return anything from the transactional lambda";
+                return "we can return anything from the TRANSCTIONAL lambda";
             });
     
             // Example d. 
-            Etherum e = Crypto.repository.requireTransaction(() -> {
+            Etherum e = requireTransaction(() -> {
                 return save(entity); // We repeat the return demo but by returning an entity
             });
     
             // Example e. 
             // Maybe we do not want to execute things inside the lambda block but desire more freedom? 
-            $TransactionHibernate tx1 = Crypto.repository.requireTransaction();
-            save(entity);
-            save(entity);
-            save(entity);
+            $TransactionHibernate tx1 = requireTransaction();
             save(entity);
             tx1.autocommit(false);
             tx1.afterCommit  (()-> {});
@@ -119,21 +110,19 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             tx1.commit();
     
             //////////////////////////////////////////////////
-            //////////////////////////////////////////////////
-            //////////////////////////////////////////////////
     
             // Example f. 
-            Crypto.repository.newTransaction(() -> {
+            newTransaction(() -> {
                 // A new transaction is created! Not reusing an existing one if there is one!
             });
     
             // Example g.
-            Crypto.repository.supportTransaction(() -> {
+            supportTransaction(() -> {
                 // A read only transaction is created! Writing to the database is not possible, and will result in a terrible offense!
             });
     
             // Example h.
-            Crypto.repository.newTransaction((tx) -> {
+            newTransaction((tx) -> {
                 save(entity);
         
                 tx.rollback();
@@ -144,13 +133,13 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             });
     
             // Example i.
-            Crypto.repository.requireTransaction(() -> {
+            requireTransaction(() -> {
                 save(entity);
             }, false /** commit false**/ );
     
             // Example j. 
             try {
-                Crypto.repository.requireTransaction(() -> {
+                requireTransaction(() -> {
                     throw new IOException();
                 });
             } catch (IOException exception) {
@@ -160,7 +149,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             // Example k.
             // Will bubble exceptions. 
             try {
-                File file = Crypto.repository.requireTransaction(() -> {
+                File file = requireTransaction(() -> {
                     if ( false ) {
                         throw new IOException();
                     }
@@ -171,11 +160,11 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             }
     
             // Example l. 
-            Session s1 = Crypto.repository.requireSession();
-            Session s2 = Crypto.repository.newSession();
+            Session s1 = requireSession();
+            Session s2 = newSession();
     
             // Example m.
-            Crypto.repository.requireOptions()
+            requireOptions()
                 .propagation($TransactionOptions.Propagation.NEW)
                 .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
                 .timeout(1000)
@@ -191,13 +180,13 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
     
             // Example n.  
             // Similar to example m. but without chaining  
-            $TransactionOptionsHibernate options = Crypto.repository.requireOptions();
+            $TransactionOptionsHibernate options = requireOptions();
             // ... options.propagation(...)
             // ... options.create().execute(...)
     
             // Example o
             // Similar to example m. and n. but showing that create() returns a transaction that we can execute. 
-            $TransactionHibernate tx2 = Crypto.repository.requireOptions()
+            $TransactionHibernate tx2 = requireOptions()
                 .propagation($TransactionOptions.Propagation.NEW)
                 .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
                 .timeout(1000)
@@ -215,7 +204,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
     
             // Example p.
             // Similar to example m., n. and o. with more options made visibile.
-            Crypto.repository.requireOptions()
+            requireOptions()
                 .timeout(1000)
         
                 // Notice the withConnection option being used! Full access! 
@@ -236,21 +225,12 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                     tx.autocommit(false);
             
                     save(entity);
-                    save(entity);
-                    save(entity);
             
                     tx.commit();
                 })
             ;
             
             return entity;
-        }
-        
-        /**
-         * Save your entity here anyway you normally do
-         */
-        private Etherum save(Etherum entity) {
-            return entity; // No need to save, as this entire class is an example only
         }
     }
     
