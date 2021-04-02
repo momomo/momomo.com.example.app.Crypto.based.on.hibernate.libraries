@@ -37,7 +37,7 @@ public class Crypto {
     /**
      * Our database setup also gives us access to execute JDBC queries anytime should we require that.
      * 
-     * See {@link momomo.com.example.app.CryptoMore.CryptoDatabase} for more configuration options with plenty of comments. Also check the superclass.
+     * See {@link CRYPTONITE.CryptoDatabase} for more configuration options with plenty of comments. Also check the superclass.
      */
     public static final class CryptoDatabase implements $DatabasePostgres {
         @Override public String name() {
@@ -57,7 +57,7 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     
     /**
-     * See {@link momomo.com.example.app.CryptoMore.CryptoSessionConfig} for more configuration options with plenty of comments. Also check the superclass. 
+     * See {@link CRYPTONITE.CryptoSessionConfig} for more configuration options with plenty of comments. Also check the superclass. 
      */
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
         public CryptoSessionConfig() {

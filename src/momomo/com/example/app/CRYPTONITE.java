@@ -5,57 +5,18 @@ import momomo.com.Is;
 import momomo.com.collections.$Set;
 import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$Migrations;
-import momomo.com.db.$Service;
 import momomo.com.db.$SessionConfig;
-import momomo.com.db.$TransactionalHibernate;
-import momomo.com.db.entities.$EntityId;
-import momomo.com.db.sessionfactory.$SessionFactoryRepository;
 import momomo.com.example.app.entities.Bitcoin;
-import org.hibernate.SessionFactory;
 import org.hibernate.tool.schema.TargetType;
 
 import java.io.File;
 
 /**
+ * Contains more configuration with comments. 
+ * 
  * @author Joseph S.
  */
-public class CryptoMore {
-    
-    /////////////////////////////////////////////////////////////////////
-    
-    public  static final CryptoRepository    R               = new CryptoRepository   (); // Not used other than at the bottom of this file! Can you find it?
-    public  static final CryptoDatabase      DATABASE        = new CryptoDatabase     (); // You might want to execute some jdbc queries using this one sometimes. We don't in this application but we made it public for you. 
-    private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConfig();
-    private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
-    
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    // All classes used above can be found declared in this file below 
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    
-    /**
-     * We set up the "repository" which gives you access to it all. 
-     */
-    public static class CryptoRepository implements $SessionFactoryRepository, $TransactionalHibernate {
-        @Override public SessionFactory sessionFactory() {
-            return SESSION_FACTORY;
-        }
-    }
-    
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
+public class CRYPTONITE {
     
     /**
      * Our database setup also gives us access to execute JDBC queries anytime should we require that.
@@ -98,7 +59,7 @@ public class CryptoMore {
     public static class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
         
         public CryptoSessionConfig() {
-            super(DATABASE);
+            super(new CryptoDatabase());
         }
     
         @Override protected String[] packages() {
@@ -215,54 +176,4 @@ public class CryptoMore {
         }
     }
     
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Example
-     * 
-     * Note, not required, and not used by Bitcoin class but the other entity service classes.  
-     * 
-     * Abstract to be extended by all our app services to allow for a 'nicer' api within the service. 
-     * 
-     * See within the entities. 
-     * 
-     * {@link momomo.com.example.app.entities.Etherum.Service}
-     * {@link momomo.com.example.app.entities.Polkadot.Service}
-     * {@link momomo.com.example.app.entities.Stellar.Service}
-     */
-    public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate {
-        @Override public $SessionFactoryRepository repository() { 
-            return CryptoMore.repository; 
-        }
-    }
-    
-    
-    
-    /////////////////////////////////////////////////////////////////////
-    // Look, you found the hidden gem!
-    /////////////////////////////////////////////////////////////////////
-    
-    /**
-     * We think 
-     *
-     *      Crypto.repository.requireTransction(() -> {
-     *         ... 
-     *      }) 
-     *
-     *         --- looks better than ---
-     *
-     *      Crypto.R.requireTransaction(()-> {
-     *
-     *      })
-     *
-     * SHIFT + R, is also more difficult to type. Crypto.re will automcomplete very well. Crypto.SHIT + R and then e.
-     *
-     * We know it is lower case, we know it is static. 
-     *
-     * This is why we left the {@link momomo.com.example.app.Crypto#REPOSITORY} for you so you know it is intentional! 
-     *
-     * But you do as you please. Sorry if we got you upset! 
-     */
-    public static final CryptoRepository repository = R;
 }
