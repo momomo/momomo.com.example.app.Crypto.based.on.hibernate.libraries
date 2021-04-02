@@ -1,6 +1,7 @@
-package momomo.com.example.app;
+package momomo.com.example;
 
 import momomo.com.db.$TransactionHibernate;
+import momomo.com.example.app.Crypto;
 import momomo.com.example.app.entities.Bitcoin;
 import momomo.com.example.app.entities.Polkadot;
 import momomo.com.example.app.entities.Stellar;
