@@ -259,7 +259,7 @@ requireTransaction(() -> {
 
 ### Part 3                                 
 
-We now look at code pieces of the **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which also **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)**.
+We now look at code pieces of the **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which also **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)** containing just example code that is really never invoked. 
 
 ```java
 // Given 
