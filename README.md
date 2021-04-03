@@ -131,10 +131,7 @@ We start by looking at our **first entity**
         */                  
         public Bitcoin insert(Timestamp time, double usd) {
             // This "very very expensive" creation need not to run inside the transaction 
-            Bitcoin entity = new Bitcoin()
-                .setId(UUID.randomUUID())
-                .setTime(time)
-                .setUsd(usd);
+            Bitcoin entity = new Bitcoin().setId(UUID.randomUUID()).setTime(time).setUsd(usd);
     
             // Now, require the transaction and execute save within, also return the saved entity. 
             return Crypto.repository.requireTransaction(() -> {
@@ -181,55 +178,88 @@ When using our `save()` we will also check to see if the entity has implemented 
 >
 > The Transactional API does not have that requirement, but the **`repository.save(..)`**, **`repository.find(...)`** currently do.    
 
-We can now invoke this method simply as **`Bitcoin.S.insert(Time.stamp(), 10000.1)`** from anyplace, even from a plain **`static void main`**: 
+We can now invoke 
+ 
+```java
+Bitcoin.S.insert(Time.stamp(), 10000.1)
+```
 
-```java                                   
-// This will work, from any place. Even the command line, or to run or debug within your editor without any external requirements.
+from anyplace, even from a plain **`static void main`**.  
 
-public static void main(String[] args){
-  Bitcoin.S.insert(Time.stamp(), 10000.1);    
-}
-```                                                                                                                                      
-
-This will **trigger** the database generation, **scan** the entities, setup the **`SessionFactory`** and get you a transaction and eventually create and **save** the one entity to the database.
-
-To populate more entities at once, within one transaction we can do as **`Bitcoin.Service#populate()`** method: 
+So given the following in **[`Bitcoin.Service`](src/momomo/com/example/app/entities/Bitcoin.java)**:
 
 ```java
-Crypto.repository.requireTransaction(() -> {
-    insert(Time.stamp(), 100001);
-    insert(Time.stamp(), 100002);
-    insert(Time.stamp(), 100003);
-    insert(Time.stamp(), 100004);
-    insert(Time.stamp(), 100005);
-});
+ public Bitcoin insert(Timestamp time, double usd) {
+    Bitcoin entity = new Bitcoin().setId(Randoms.UUID()).setTime(time).setUsd(usd);
+
+    return Crypto.repository.requireTransaction((tx)-> {
+        return save(entity);
+    });
+}
 ```
+
+and  
+
+```java
+public void populate(int multiply) {
+    // Multiple transactions each started inside the insert method
+    insert(Time.stamp(), multiply * 1);
+    insert(Time.stamp(), multiply * 2);
+    
+    // Two at once, insert call will just continue using this created transaction
+    Crypto.repository.requireTransaction(() -> {
+        insert(Time.stamp(), multiply * 3);
+        insert(Time.stamp(), multiply * 4);
+    });
+}              
+```
+
+we can execute 
+
+```java
+public static void main(String[] args) {
+    Bitcoin.S.populate();
+}
+```         
+
+which will **trigger** the database generation, **scan** for entity classes in the *configured packages*, setup the **`SessionFactory`** and get you a transaction to eventually create and **save** entities to the database.
 
 ### Part 2
 
-You've now seen the **`requireTransaction(()->{})`**, let us see what else can we do where we now focus on showing how things can be made **prettier** by creating a static inner class **[`CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** **at the bottom** **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation **being really simple**, and **minimal**: 
+You've now seen **`requireTransaction(()->{})`**.           z
+
+Let us see what else can we do. 
+
+First we want to show you how our **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class can be made **prettier** by utilitizing the already created the inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)** with the implementation being extremely **simple**, and **minimal**. 
 
 ```java
-public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { /** That's it! **/ }
+public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { 
+    /** That's it! **/ 
+}
 ```                                                            
 
-Now take a look at **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** for the minimal version of what the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.                                                                           
+Now we've rewritten **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** and called it **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** which now contains a **minimal** version of the logic in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.
+
+1. The entity class now extends **`$EntityIdUUID`** which will generate an UUID identifier for us, so need to manually set that part.  
+2. **[`Polkadto.Service`](src/momomo/com/example/app/entities/Etherum.java)** now **`extends`** **[`Crypto.CryptoService<Polkadot>`](src/momomo/com/example/app/Crypto.java#L129)** which will gives access to a bunch of methods, such as **`save(..)`**, **`list()`**, **`validate()`**, **`findByField(...)`**, **`findByEntity(...)`**, **`reqireTransaction(...)`**, **`newTransaction(...)`**, **`supportTransaction(...)`** and many more without the need for external reference for access like in **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** where we did **`Crypto.repository.requireTransaction(...)`**, now we can simply do **`requireTransaction(...)`**.   
 
 ```java                                      
-// This you've seen from Bitcoin.java
+// This you saw in Bitcoin.java
 
 Crypto.repository.requireTransaction(() -> {
     return Crypto.repository.save(entity);
 });
 
-// This is what we do now instead due to inheriting $Service<Etherum>
+// This is what we now do instead due to inheriting $Service<Polkadot>
  
 requireTransaction(() -> {
     return save(entity);
 });
-```
+```                          
 
-We now take a look at pieces of code inside class **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which also **`extends`** **`Crypto.CryptoService<Etherum>`**.
+### Part 3                                 
+
+We now look at code pieces of the **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which also **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)**.
 
 ```java
 // Given 
@@ -493,36 +523,24 @@ In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we 
  */                             
 public void populate(int multiplier) {
     newTransaction((tx1) -> {
-        insert(Time.stamp(), multiplier * 101);
-        insert(Time.stamp(), multiplier * 102);
-        insert(Time.stamp(), multiplier * 103);
-        insert(Time.stamp(), multiplier * 104);
-        insert(Time.stamp(), multiplier * 105);
+        insert(Time.stamp(), multiplier * 11);
+        insert(Time.stamp(), multiplier * 12);
         
         // Start a new transaction within
         newTransaction(tx2 -> {
-            insert(Time.stamp(), multiplier * 201);
-            insert(Time.stamp(), multiplier * 202);
-            insert(Time.stamp(), multiplier * 203);
-            insert(Time.stamp(), multiplier * 204);
-            insert(Time.stamp(), multiplier * 205);
+            insert(Time.stamp(), multiplier * 21);
+            insert(Time.stamp(), multiplier * 22);
             
             // Another one
             newTransaction(tx3 -> {
-                insert(Time.stamp(), multiplier * 301);
-                insert(Time.stamp(), multiplier * 302);
-                insert(Time.stamp(), multiplier * 303);
-                insert(Time.stamp(), multiplier * 304);
-                insert(Time.stamp(), multiplier * 305);
+                insert(Time.stamp(), multiplier * 31);
+                insert(Time.stamp(), multiplier * 32);
             });
             
             // Continue on the previous last active one (same as tx2) 
             requireTransaction(tx4 -> {
-                insert(Time.stamp(), multiplier * 401);
-                insert(Time.stamp(), multiplier * 402);
-                insert(Time.stamp(), multiplier * 403);
-                insert(Time.stamp(), multiplier * 404);
-                insert(Time.stamp(), multiplier * 405);
+                insert(Time.stamp(), multiplier * 41);
+                insert(Time.stamp(), multiplier * 42);
             });
             
             // Neither 201 ... or 401 ... will get into db since that tx rolledback
@@ -530,36 +548,24 @@ public void populate(int multiplier) {
             
             // The same as tx1, no issues there. Should be in.   
             requireTransaction(tx5 -> {
-                insert(Time.stamp(), multiplier * 501);
-                insert(Time.stamp(), multiplier * 502);
-                insert(Time.stamp(), multiplier * 503);
-                insert(Time.stamp(), multiplier * 504);
-                insert(Time.stamp(), multiplier * 505);
+                insert(Time.stamp(), multiplier * 51);
+                insert(Time.stamp(), multiplier * 52);
                 
                 // The same as tx1 and tx5, no issues there. Should enter db.    
                 requireTransaction(($TransactionHibernate tx6) -> {
-                    insert(Time.stamp(), multiplier * 601);
-                    insert(Time.stamp(), multiplier * 602);
-                    insert(Time.stamp(), multiplier * 603);
-                    insert(Time.stamp(), multiplier * 604);
-                    insert(Time.stamp(), multiplier * 605);
+                    insert(Time.stamp(), multiplier * 61);
+                    insert(Time.stamp(), multiplier * 62);
                     
                     // New transaction, will be in    
                     newTransaction(($TransactionHibernate tx7) -> {
-                        insert(Time.stamp(), multiplier * 701);
-                        insert(Time.stamp(), multiplier * 702);
-                        insert(Time.stamp(), multiplier * 703);
-                        insert(Time.stamp(), multiplier * 704);
-                        insert(Time.stamp(), multiplier * 705);
+                        insert(Time.stamp(), multiplier * 71);
+                        insert(Time.stamp(), multiplier * 72);
                     });
                     
                     // New transaction, won't be in    
                     newTransaction(($TransactionHibernate tx8) -> {
-                        insert(Time.stamp(), multiplier * 801);
-                        insert(Time.stamp(), multiplier * 802);
-                        insert(Time.stamp(), multiplier * 803);
-                        insert(Time.stamp(), multiplier * 804);
-                        insert(Time.stamp(), multiplier * 805);
+                        insert(Time.stamp(), multiplier * 81);
+                        insert(Time.stamp(), multiplier * 82);
                         
                         tx8.rollback();
                     });
@@ -568,7 +574,6 @@ public void populate(int multiplier) {
         });
     });
 }                                           
-
 ```
 In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we also added a couple more methods:
 
@@ -624,7 +629,7 @@ When we run this static void main we will eventually find the **following in our
    ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.2021.04.03.V1.jpg?raw=true)        
    
    * ***polkadot table***  
-   ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.2021.04.03.V1.jpg?raw=true)        
+   ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.2021.04.03.V2.jpg?raw=true)        
    
    * ***stellar table***  
    ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.2021.04.03.V1.jpg?raw=true)        

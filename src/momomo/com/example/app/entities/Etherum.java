@@ -57,10 +57,7 @@ import java.util.HashMap;
          */
         public Etherum insert(Timestamp time, double usd) {  if ( true ) return null;
         
-            Etherum entity = new Etherum()
-                .setTime(time)
-                .setUsd(usd)
-            ;
+            Etherum entity = new Etherum().setTime(time).setUsd(usd);
             
             // Example a.
             requireTransaction(($TransactionHibernate transaction) -> {

@@ -40,14 +40,9 @@ import java.util.UUID;
         
         public Bitcoin insert(Timestamp time, double usd) {
             // This 'very very expensive' creation need not to be inside the transaction (just for demo)
-            Bitcoin entity = new Bitcoin()
-                .setId(Randoms.UUID())
-                .setTime(time)
-                .setUsd(usd);
+            Bitcoin entity = new Bitcoin().setId(Randoms.UUID()).setTime(time).setUsd(usd);
     
             return Crypto.repository.requireTransaction((tx)-> {
-                System.out.println("bbb" + tx);
-                
                 return save(entity);
             });
         }
