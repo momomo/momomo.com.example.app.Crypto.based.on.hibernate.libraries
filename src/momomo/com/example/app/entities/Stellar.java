@@ -78,11 +78,11 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
         /////////////////////////////////////////////////////////////////////
         
         /**
-         * Bunch of complex and nested transaction! 
-         * Take a look at the comments!
+         * Bunch of complex and nested transaction.
+         
+         * Take a look at the comments within!
          */
         public void populate(int multiplier) {
-            
             newTransaction((tx1) -> {
                 insert(Time.stamp(), multiplier * 101);
                 insert(Time.stamp(), multiplier * 102);

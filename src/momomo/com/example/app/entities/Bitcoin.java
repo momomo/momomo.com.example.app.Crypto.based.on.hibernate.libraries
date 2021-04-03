@@ -76,14 +76,14 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
          * 
          */
         private Bitcoin save(Bitcoin entity) {
-            return Crypto.REPOSITORY.save(entity);  // OR Crypto.repository.session().save(entity); OR Crypto.repository.session().saveOrUpdate(entity);
+            return Crypto.repository.save(entity);  // OR Crypto.repository.session().save(entity); OR Crypto.repository.session().saveOrUpdate(entity);
         }
         
         /////////////////////////////////////////////////////////////////////
         
         public void populate(int mul) {
             // All in one transaction 
-            Crypto.TRANSACTIONAL.requireTransaction(() -> {
+            Crypto.repository.requireTransaction(() -> {
                 insert(Time.stamp(), mul * 100001);
                 insert(Time.stamp(), mul * 100002);
                 insert(Time.stamp(), mul * 100003);

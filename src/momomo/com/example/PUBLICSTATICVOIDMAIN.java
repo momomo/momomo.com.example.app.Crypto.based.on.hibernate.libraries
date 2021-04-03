@@ -17,7 +17,7 @@ public class PUBLICSTATICVOIDMAIN {
         Stellar.S.populate(1);
     
         {
-            $TransactionHibernate tx = Crypto.TRANSACTIONAL.requireTransaction();
+            $TransactionHibernate tx = Crypto.repository.requireTransaction();
         
             Bitcoin.S.populate(10);
             Polkadot.S.populate(10);

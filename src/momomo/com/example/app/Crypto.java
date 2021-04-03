@@ -20,11 +20,12 @@ public class Crypto {
      * As this is an example application, we prefer to show you how everything has its own area of responsibility and although they could be combined, we choose to present them by declaring them separately for clarity. Of course, the class {@link momomo.com.example.app.Crypto.CryptoTransactionalRepository} for instance, could implement $TransactionalHibernate as well and provide both features but we choose to show you can choose to use just the Transactional library should you not desire the other functionality that a repository also provides such as save(entity), refresh(entity), find(..), and so forth. See {@link momomo.com.example.app.Crypto.CryptoTransactionalRepository} for an example. 
      ********************************************************************/ 
     
-    private static final CryptoDatabase      DATABASE        = new CryptoDatabase     ();
-    private static final CryptoSessionConfig SESSION_CONFIG  = new CryptoSessionConfig();
-    private static final SessionFactory      SESSION_FACTORY = SESSION_CONFIG.create  ();
-    public  static final CryptoTransactional TRANSACTIONAL   = new CryptoTransactional() {};
-    public  static final CryptoRepository    REPOSITORY      = new CryptoRepository   () {};
+    private static final CryptoDatabase                 DATABASE        = new CryptoDatabase     ();            // Not really required or used outside of this class
+    private static final CryptoSessionConfig            SESSION_CONFIG  = new CryptoSessionConfig();            // Not really required or used outside of this class
+    private static final SessionFactory                 SESSION_FACTORY = SESSION_CONFIG.create  ();            // Not really required or used outside of this class
+    private static final CryptoTransactional            TRANSACTIONAL   = new CryptoTransactional() {};         // Not really required or used outside of this class
+    private static final CryptoRepository               REPOSITORY      = new CryptoRepository   () {};         // Not really required or used outside of this class
+    public  static final CryptoTransactionalRepository  repository      = new CryptoTransactionalRepository();  // Is a combo of TRANSACTIONAL and REPOSITORY in one. 
     
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ public class Crypto {
     /**
      * Our database setup also gives us access to execute JDBC queries anytime should we require that.
      * 
-     * See {@link momomo.com.example.CRYPTONITE.CryptoDatabase} for more configuration options with plenty of comments. Also check the superclass.
+     * See {@link momomo.com.example.CryptoMaximal.CryptoDatabase} for more configuration options with plenty of comments. Also check the superclass.
      */
     public static final class CryptoDatabase implements $DatabasePostgres {
         @Override public String name() {
@@ -57,7 +58,7 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     
     /**
-     * See {@link momomo.com.example.CRYPTONITE.CryptoSessionConfig} for more configuration options with plenty of comments. Also check the superclass. 
+     * See {@link momomo.com.example.CryptoMaximal.CryptoSessionConfig} for more configuration options with plenty of comments. Also check the superclass. 
      */
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
         public CryptoSessionConfig() {
@@ -96,8 +97,7 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     
     public interface CryptoTransactional extends $TransactionalHibernate {
-        @Override
-        default CryptoRepository repository() {
+        @Override default CryptoRepository repository() {
             return REPOSITORY;
         }
     }
@@ -109,10 +109,7 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     
-    /**
-     * Not used. Just for demo. 
-     */
-    private static final class CryptoTransactionalRepository implements $SessionFactoryRepository, $TransactionalHibernate {
+    public static final class CryptoTransactionalRepository implements $SessionFactoryRepository, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;
         }

@@ -16,7 +16,7 @@ import java.io.File;
  * 
  * @author Joseph S.
  */
-public class CRYPTONITE {
+public class CryptoMaximal {
     
     /**
      * Our database setup also gives us access to execute JDBC queries anytime should we require that.
