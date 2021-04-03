@@ -22,9 +22,7 @@ import java.util.List;
  * 
  * @author Joseph S.
  */
-@Entity
-@Table(name = Stellar.Cons.table)
-public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Stellar extends $EntityIdUUID {
+@Entity @Table(name = Stellar.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Stellar extends $EntityIdUUID {
     
     @Column(name = Cons.time) private Timestamp time;
     @Column(name = Cons.usd ) private double    usd;     // Represents the price in usd
@@ -73,8 +71,6 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             });
         }
         
-        /////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
         
         /**
@@ -160,8 +156,6 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
             });
         }
         
-        /////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////
     }
 }

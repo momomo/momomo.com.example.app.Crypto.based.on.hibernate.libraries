@@ -145,11 +145,11 @@ We start by looking at our **first entity**
 }
 ```
 
-We highlight the method in `Bitcoin.Service.insert(Timestamp, double)`. 
-
-In this method we create the entity 
+We comment on the code in method `insert()` 
 
 ```java
+// We create the entity
+
 Bitcoin entity = new Bitcoin()
     .setId(UUID.randomUUID())
     .setTime(time)
@@ -157,17 +157,21 @@ Bitcoin entity = new Bitcoin()
 ;
 ```                          
 
-The we require a write capable `transaction` which means create a `new transaction` if there is not already one ongoing for this thread, perhaps already one started by the caller to `insert()`? If not, create it.   
-
 ```java
+// Then we require a write capable 'transaction' which means create a 'new transaction' if there is not already an ongoing one for this thread 
+
 return Crypto.repository.requireTransaction((tx) -> {
     return Crypto.repository.save(entity);
 });
 ```                                                                                                                            
 
-The `save(entity)` will execute within the `transaction` and when it terminates it will `commit the transaction` if it was the one who `started it`.
+The **`save(entity)`** call will execute within a `transaction` and when it terminates it will **commit the transaction** if it **was the one who started it**.
 
-The **save call** could really be your own normal logic. If you use `Spring` you would use whatever you where you using, likely an `EntityManager` and `em.save(entity)`, and if `Hibernate` likey `session.saveOrUpdate(entity)`. Here reused our already created and **very capable** repository which eventually will call `session.saveOrUpdate(entity)` as well as ensure that it was saved properly and assigned an id as it should.
+The **`save()`** call could really be your own normal logic. If you use `Spring` you would use whatever you where you using, likely using an `EntityManager` and calling `em.save(entity)`, and if `Hibernate` likey `session.saveOrUpdate(entity)`. 
+
+Here we used our already created and **capable** repository which will eventually call `session.saveOrUpdate(entity)` and to ensure that it was saved properly, it checks it was assigned an `id` as it should which is not always the case. 
+
+When using our `save()` we will also check to see if the entity has implemented **[`$Entity.Events`](https://github.com/momomo/momomo.com.platform.db.base.jpa/tree/master/src/momomo/com/db/entities/$Entity.java)** where your entity may implement `beforeSave()` and/or `afterSave()` logic which will be triggered before and/or after a `save()`. We use this sometimes to *set default values** on some fields or generate values based on other fields *to set a third*. 
 
 > Note!
 > 
@@ -175,29 +179,29 @@ The **save call** could really be your own normal logic. If you use `Spring` you
 >   
 > We can see that this is no longer really required as the interface is indeed empty but this was a safety mechanism for our internal code once to ensure control as means of declaration but we will eventually remove this requirement from our `Repository` implementation to support any entity. 
 >
-> The Transactional API does not have that requirement, but the repository.save(..), repository.find(...) currently do.    
+> The Transactional API does not have that requirement, but the **`repository.save(..)`**, **`repository.find(...)`** currently do.    
 
-We can now invoke this method simply as `Bitcoin.S.insert(Time.stamp(), 10000.1)` from anyplace, even a **`static void main`** and we do: 
+We can now invoke this method simply as **`Bitcoin.S.insert(Time.stamp(), 10000.1)`** from anyplace, even from a plain **`static void main`**: 
 
-```java
+```java                                   
+// This will work, from any place. Even the command line, or to run or debug within your editor without any external requirements.
+
 public static void main(String[] args){
-  Bitcoin.S.insert(Time.stamp(), 10000.1); // This will work, from any place. Even the command line, or to run or debug within your editor without any external requirements.    
+  Bitcoin.S.insert(Time.stamp(), 10000.1);    
 }
 ```                                                                                                                                      
 
-This will **trigger** the database generation, scan the entities, setup the `sessionFactory` and get you a transaction and eventually create and **save the data** to the database.s
+This will **trigger** the database generation, **scan** the entities, setup the **`SessionFactory`** and get you a transaction and eventually create and **save** the one entity to the database.
 
-You can find plenty more examples, some very complex in **[`PUBLICSTATICVOIDMAIN.java`](src/momomo/com/example/PUBLICSTATICVOIDMAIN.java)**.
-
-To populate more entities at once, within one transaction we can do as `Bitcoin.Service#populate()` method: 
+To populate more entities at once, within one transaction we can do as **`Bitcoin.Service#populate()`** method: 
 
 ```java
 Crypto.repository.requireTransaction(() -> {
-    insert(Time.stamp(), mul * 100001);
-    insert(Time.stamp(), mul * 100002);
-    insert(Time.stamp(), mul * 100003);
-    insert(Time.stamp(), mul * 100004);
-    insert(Time.stamp(), mul * 100005);
+    insert(Time.stamp(), 100001);
+    insert(Time.stamp(), 100002);
+    insert(Time.stamp(), 100003);
+    insert(Time.stamp(), 100004);
+    insert(Time.stamp(), 100005);
 });
 ```
 
@@ -207,7 +211,9 @@ You've now seen the **`requireTransaction(()->{})`**, let us see what else can w
 
 ```java
 public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { /** That's it! **/ }
-```                                                                                                                                      
+```                                                            
+
+Now take a look at **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** for the minimal version of what the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.                                                                          
 
 We now take a look at pieces of code inside class **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which this time around **`extends Crypto.CryptoService<Etherum>`** where **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** were plain.
 
@@ -403,17 +409,17 @@ $TransactionOptionsHibernate options = requireOptions();
 ```java
 // Getting a transaction that we can execute
 
-$TransactionHibernate tx1 = requireOptions()
+$TransactionHibernate tx = requireOptions()
     .propagation($TransactionOptions.Propagation.NEW)
     .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
     .timeout(1000)
     .create()
 ;
-tx1.execute(()-> {
+tx.execute(()-> {
     save(entity);
 });
 
-tx1.execute(()-> {
+tx.execute(()-> {
     save(entity);
 
     tx1.commit();
@@ -453,7 +459,7 @@ In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we 
 
 ```java
 /**
- * Bunch of complex and nested transaction.
+ * Bunch of complex and nested transactions. 
  * 
  * Take a look at the comments within!
  */ 
@@ -535,72 +541,22 @@ public void populate(int multiplier) {
     });
 }
 ```
-
-### Part three
-
-We now take a look class **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** which has gone through a *couple of changes* compared to the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** and **[`Etherum.java`](src/momomo/com/example/app/entities/Etherum.java)** classes. 
-
-   * We've gotten rid of the `@Id private UUID id;` seen inside **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** as well set the `setId()` call in `insert()` method.   
-   Instead our entity implements **[`$EntityIdUUID`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/entities/$EntityIdUUID.java)** which will provide and generate one for us automatically.
-   
-   * The `Service` inside **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** now `extends` **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** so we have `Polkadot.Service extends Crypto.CryptoService<Polkadot>`  
-   There is nothing to implement as everything required is already implemented by **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** which only provides the `Crypto.repository` to use.
-   
-   * So what we by extending **[`$Service`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/tree/master/src/momomo/com/db/%24Service.java)** is the following:   
-   &nbsp;![Available methods](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.v2.2021.04.22.jpg?raw=true)
-      * `List<Polkadot> all     = super.list()` to list all for that table.
-      * `List<Polkadot> matches = super.list( criteria().add(...) )` to find many using a criteria query.
-      * `List<Polkadot> matches = super.findAllByProperty("time", Time.stamp()` to many some using a property value.  
-      * `Polkadot = super.findByProperty("time", Time.stamp()` to find one using property value.   
-      * `Polkadot = super.findByEntity(new Polkadot().setTime(Time.stamp()).setUsd(100.1))`; to find one with the time stamp and price of `100` usd and will build the criteria for us.
-      * `super.save(entity)` to `session.saveOrUpdate()`. It will also verify the `save` was ok, since at times this won't occur such as being in a read only transaction by mistake.  
-      * `requireTransaction(...)` 
-      * `newTransaction(...)` 
-      * `supportTransaction(...)`
-      * `requireOptions(...)`  
-      * ...         
-
-
-So now in **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** we have 
+In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we also added a couple more methods:
 
 ```java
-public static final class Service extends Crypto.CryptoService<Polkadot> { ... }
-```                                                                            
+// Return all the historic data within polkadot table
 
-with rewritten **`insert()`** without the need to access **`Crypto.R`** anymore from the **`Service`**
-
-```java
-public Polkadot insert(Timestamp time, double usd) {
-    return requireTransaction(()-> {
-        Polkadot entity = new Polkadot()
-            .setTime(time)
-            .setUsd(usd)
-        ;
-        return save(entity);   
-    });
-}      
-```
-
-and also added some more examples:
-
-```java
-/**
- * Return all the historic data within polkadot table 
- */
-public List<Polkadot> historic() {
+public List<Stellar> historic() {
     return supportTransaction(()-> {
         return super.list();
     });
 }            
 ```
 
-and 
-
 ```java
-/**
- * Return the data within time range
-**/
-public List<Polkadot> range(Timestamp from, Timestamp to) {
+// Return the data within time range
+
+public List<Stellar> range(Timestamp from, Timestamp to) {
     return supportTransaction(()-> {
         return list(criteria()
             .add( Restrictions.ge(Cons.time, from) )
@@ -610,8 +566,6 @@ public List<Polkadot> range(Timestamp from, Timestamp to) {
 }
 ```
 
-Take a look at **[`Stellar.java`](src/momomo/com/example/app/entities/Stellar.java)** for the minimal version of what the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like. 
- 
 ```java
 @Entity
 @Table(name = Stellar.Cons.table)

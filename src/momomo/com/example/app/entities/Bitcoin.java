@@ -20,9 +20,7 @@ import java.sql.Timestamp;
  * 
  * @author Joseph S.
  */
-@Entity
-@Table(name = Bitcoin.Cons.table)
-public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Bitcoin implements $Entity {
+@Entity @Table(name = Bitcoin.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Bitcoin implements $Entity {
     
     @Id
     private Long      id;
@@ -60,7 +58,9 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
                 .setTime(time)
                 .setUsd(usd);
     
-            return save(entity);
+            return Crypto.repository.requireTransaction((tx)-> {
+                return save(entity);
+            });
         }
         
         /////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
          * 
          * We are just showing the minimal viable here but please see the entities 
          * {@link momomo.com.example.app.entities.Polkadot.Service} and {@link momomo.com.example.app.entities.Stellar.Service}
-         * Which do extend {@link momomo.com.example.app.Crypto.CryptoService}.   
+         * that do extend {@link momomo.com.example.app.Crypto.CryptoService}.   
          * 
          */
         private Bitcoin save(Bitcoin entity) {
@@ -82,16 +82,16 @@ public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final cla
         /////////////////////////////////////////////////////////////////////
         
         public void populate(int mul) {
-            // All in one transaction 
-            Crypto.repository.requireTransaction(() -> {
-                insert(Time.stamp(), mul * 100001);
-                insert(Time.stamp(), mul * 100002);
-                insert(Time.stamp(), mul * 100003);
-                insert(Time.stamp(), mul * 100004);
-                insert(Time.stamp(), mul * 100005);
-            });
+            // Multiple transactions each started inside the insert method
+            insert(Time.stamp(), mul * 1001);
+            insert(Time.stamp(), mul * 1002);
+            insert(Time.stamp(), mul * 1003);
     
-            // We should now 100% have new rows in the table bitcoin!
+            // Two at once, insert call will just continue using this created transaction
+            Crypto.repository.requireTransaction(() -> {
+                insert(Time.stamp(), mul * 1004);
+                insert(Time.stamp(), mul * 1005);
+            });
         }
         
         /////////////////////////////////////////////////////////////////////

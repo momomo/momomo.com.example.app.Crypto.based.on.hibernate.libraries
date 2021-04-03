@@ -24,9 +24,7 @@ import java.util.HashMap;
  * 
  * @author Joseph S.
  */
-@Entity
-@Table(name = Etherum.Cons.table)
-public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Etherum extends $EntityIdUUID {
+@Entity @Table(name = Etherum.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Etherum extends $EntityIdUUID {
     
     private Timestamp time;
     private double    usd; // Represents the price in usd
