@@ -154,7 +154,8 @@ Bitcoin entity = new Bitcoin()
 ```                          
 
 ```java
-// Then we require a write capable 'transaction' which means create a 'new transaction' if there is not already an ongoing one for this thread 
+// Then we require a write capable 'transaction' which means create a 'new transaction' 
+// if there is not already an ongoing one for this thread 
 
 return Crypto.repository.requireTransaction((tx) -> {
     return Crypto.repository.save(entity);
