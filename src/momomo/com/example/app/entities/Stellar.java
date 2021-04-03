@@ -80,36 +80,24 @@ import java.util.List;
          */
         public void populate(int multiplier) {
             newTransaction((tx1) -> {
-                insert(Time.stamp(), multiplier * 101);
-                insert(Time.stamp(), multiplier * 102);
-                insert(Time.stamp(), multiplier * 103);
-                insert(Time.stamp(), multiplier * 104);
-                insert(Time.stamp(), multiplier * 105);
+                insert(Time.stamp(), multiplier * 11);
+                insert(Time.stamp(), multiplier * 12);
                 
                 // Start a new transaction within
                 newTransaction(tx2 -> {
-                    insert(Time.stamp(), multiplier * 201);
-                    insert(Time.stamp(), multiplier * 202);
-                    insert(Time.stamp(), multiplier * 203);
-                    insert(Time.stamp(), multiplier * 204);
-                    insert(Time.stamp(), multiplier * 205);
+                    insert(Time.stamp(), multiplier * 21);
+                    insert(Time.stamp(), multiplier * 22);
                     
                     // Another one
                     newTransaction(tx3 -> {
-                        insert(Time.stamp(), multiplier * 301);
-                        insert(Time.stamp(), multiplier * 302);
-                        insert(Time.stamp(), multiplier * 303);
-                        insert(Time.stamp(), multiplier * 304);
-                        insert(Time.stamp(), multiplier * 305);
+                        insert(Time.stamp(), multiplier * 31);
+                        insert(Time.stamp(), multiplier * 32);
                     });
                     
                     // Continue on the previous last active one (same as tx2) 
                     requireTransaction(tx4 -> {
-                        insert(Time.stamp(), multiplier * 401);
-                        insert(Time.stamp(), multiplier * 402);
-                        insert(Time.stamp(), multiplier * 403);
-                        insert(Time.stamp(), multiplier * 404);
-                        insert(Time.stamp(), multiplier * 405);
+                        insert(Time.stamp(), multiplier * 41);
+                        insert(Time.stamp(), multiplier * 42);
                     });
                     
                     // Neither 201 ... or 401 ... will get into db since that tx rolledback
@@ -117,36 +105,24 @@ import java.util.List;
                     
                     // The same as tx1, no issues there. Should be in.   
                     requireTransaction(tx5 -> {
-                        insert(Time.stamp(), multiplier * 501);
-                        insert(Time.stamp(), multiplier * 502);
-                        insert(Time.stamp(), multiplier * 503);
-                        insert(Time.stamp(), multiplier * 504);
-                        insert(Time.stamp(), multiplier * 505);
+                        insert(Time.stamp(), multiplier * 51);
+                        insert(Time.stamp(), multiplier * 52);
                         
                         // The same as tx1 and tx5, no issues there. Should enter db.    
                         requireTransaction(($TransactionHibernate tx6) -> {
-                            insert(Time.stamp(), multiplier * 601);
-                            insert(Time.stamp(), multiplier * 602);
-                            insert(Time.stamp(), multiplier * 603);
-                            insert(Time.stamp(), multiplier * 604);
-                            insert(Time.stamp(), multiplier * 605);
+                            insert(Time.stamp(), multiplier * 61);
+                            insert(Time.stamp(), multiplier * 62);
                             
                             // New transaction, will be in    
                             newTransaction(($TransactionHibernate tx7) -> {
-                                insert(Time.stamp(), multiplier * 701);
-                                insert(Time.stamp(), multiplier * 702);
-                                insert(Time.stamp(), multiplier * 703);
-                                insert(Time.stamp(), multiplier * 704);
-                                insert(Time.stamp(), multiplier * 705);
+                                insert(Time.stamp(), multiplier * 71);
+                                insert(Time.stamp(), multiplier * 72);
                             });
                             
                             // New transaction, won't be in    
                             newTransaction(($TransactionHibernate tx8) -> {
-                                insert(Time.stamp(), multiplier * 801);
-                                insert(Time.stamp(), multiplier * 802);
-                                insert(Time.stamp(), multiplier * 803);
-                                insert(Time.stamp(), multiplier * 804);
-                                insert(Time.stamp(), multiplier * 805);
+                                insert(Time.stamp(), multiplier * 81);
+                                insert(Time.stamp(), multiplier * 82);
                                 
                                 tx8.rollback();
                             });

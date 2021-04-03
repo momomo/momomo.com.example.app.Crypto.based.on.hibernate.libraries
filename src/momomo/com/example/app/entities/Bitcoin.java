@@ -14,27 +14,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
  * Simple sample entity.  
  * 
  * @author Joseph S.
  */
-@Entity @Table(name = Bitcoin.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Bitcoin implements $Entity {
+@Entity @Table(name = "bitcoin") public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Bitcoin implements $Entity {
     
     @Id
-    private Long      id;
+    private UUID      id;
     private Timestamp time;
     private double    usd; // Represents the price in usd
-    
-    /////////////////////////////////////////////////////////////////////
-    
-    /**
-     * We separate constants and transient things from the main entity to keep the entity Bitcoin clean
-     */
-    public static final class Cons {        
-        public static final String table = "bitcoin";
-    }
     
     /////////////////////////////////////////////////////////////////////
     
@@ -45,52 +37,36 @@ import java.sql.Timestamp;
     public static final Service S = new Service(); public static final class Service { private Service(){}
         
         /////////////////////////////////////////////////////////////////////
-    
-        /**
-         * Also 
-         * @see Etherum.Service#insert(java.sql.Timestamp, double)
-         * @see Polkadot.Service#insert(java.sql.Timestamp, double)
-         */
+        
         public Bitcoin insert(Timestamp time, double usd) {
             // This 'very very expensive' creation need not to be inside the transaction (just for demo)
             Bitcoin entity = new Bitcoin()
-                .setId(Randoms.Long())
+                .setId(Randoms.UUID())
                 .setTime(time)
                 .setUsd(usd);
     
             return Crypto.repository.requireTransaction((tx)-> {
+                System.out.println("bbb" + tx);
+                
                 return save(entity);
             });
         }
         
-        /////////////////////////////////////////////////////////////////////
-        
-        /**
-         * Save your entity here anyway you would normally do!
-         * 
-         * Note, if you extend our base app service {@link momomo.com.example.app.Crypto.CryptoService} then we would not need to use Crypto.repository.save() but just save()!
-         * 
-         * We are just showing the minimal viable here but please see the entities 
-         * {@link momomo.com.example.app.entities.Polkadot.Service} and {@link momomo.com.example.app.entities.Stellar.Service}
-         * that do extend {@link momomo.com.example.app.Crypto.CryptoService}.   
-         * 
-         */
         private Bitcoin save(Bitcoin entity) {
-            return Crypto.repository.save(entity);  // OR Crypto.repository.session().save(entity); OR Crypto.repository.session().saveOrUpdate(entity);
+            return Crypto.repository.save(entity);
         }
         
         /////////////////////////////////////////////////////////////////////
         
-        public void populate(int mul) {
+        public void populate(int multiply) {
             // Multiple transactions each started inside the insert method
-            insert(Time.stamp(), mul * 1001);
-            insert(Time.stamp(), mul * 1002);
-            insert(Time.stamp(), mul * 1003);
-    
+            insert(Time.stamp(), multiply * 1);
+            insert(Time.stamp(), multiply * 2);
+            
             // Two at once, insert call will just continue using this created transaction
             Crypto.repository.requireTransaction(() -> {
-                insert(Time.stamp(), mul * 1004);
-                insert(Time.stamp(), mul * 1005);
+                insert(Time.stamp(), multiply * 3);
+                insert(Time.stamp(), multiply * 4);
             });
         }
         

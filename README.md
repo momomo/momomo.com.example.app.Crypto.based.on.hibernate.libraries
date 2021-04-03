@@ -108,7 +108,7 @@ Now that you've seen it, glanced it, consumed it, you may ***proceed***.
 
 Link to **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)**, **[`$Transactional`](https://github.com/momomo/momomo.com.platform.db.transactional/tree/master/src/momomo/com/db/%24Transactional.java)**, **[`$SessionFactoryRepository`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/sessionfactory/$SessionFactoryRepository.java)** 
 
-### Part one 
+### Part 1 
 
 We start by looking at our **first entity** 
 
@@ -205,7 +205,7 @@ Crypto.repository.requireTransaction(() -> {
 });
 ```
 
-### Part two
+### Part 2
 
 You've now seen the **`requireTransaction(()->{})`**, let us see what else can we do where we now focus on showing how things can be made **prettier** by creating a static inner class **[`CryptoService`](src/momomo/com/example/app/Crypto.java#L216)** **at the bottom** **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** with the implementation **being really simple**, and **minimal**: 
 
@@ -213,9 +213,23 @@ You've now seen the **`requireTransaction(()->{})`**, let us see what else can w
 public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { /** That's it! **/ }
 ```                                                            
 
-Now take a look at **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** for the minimal version of what the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.                                                                          
+Now take a look at **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** for the minimal version of what the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.                                                                           
 
-We now take a look at pieces of code inside class **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which this time around **`extends Crypto.CryptoService<Etherum>`** where **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** were plain.
+```java                                      
+// This you've seen from Bitcoin.java
+
+Crypto.repository.requireTransaction(() -> {
+    return Crypto.repository.save(entity);
+});
+
+// This is what we do now instead due to inheriting $Service<Etherum>
+ 
+requireTransaction(() -> {
+    return save(entity);
+});
+```
+
+We now take a look at pieces of code inside class **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which also **`extends`** **`Crypto.CryptoService<Etherum>`**.
 
 ```java
 // Given 
@@ -225,16 +239,6 @@ Etherum entity = new Etherum()
     .setTime(time)
     .setUsd(usd)
 ;
-```                                                
-
-A rewind from the **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class 
-
-```java                                      
-// This you've seen from Bitcoin.java
- 
-requireTransaction(() -> {
-    return save(entity);
-});                              
 ```
 
 ```java
@@ -453,16 +457,40 @@ requireOptions()
         tx.commit();
     })
 ;
-```                          
+```                                                                                                                              
 
-In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we can find:  
+### Part 3
+
+While in Bitcoin, Etherum, Polkadot services, we required the transaction inside the insert method, in Stellar, we no longer use `requireTransaction()` because we put that burden for the caller to know the call needs a transaction to reduce boiler plate further. 
+
+In reality all of our code no longer uses `requireTransaction` other than by the callers because the caller would know the entire transaction scope and likely would need to make more than one insert across multiple tables to create all of the things at the same time.
+
+Using Spring, that caller would have had to extract those parts to fit neatly into a method, while the caller for us would just wrap them inside a lambda. 
+
+So in **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we can now find: 
+
+```java
+public Stellar insert(Timestamp time, double usd) {
+    return save( create().setTime(time).setUsd(usd) ); 
+}
+```
+
+which expects the caller to do the following when calling: 
+
+```java
+Crypto.repository.requireTransaction(()-> {
+    Stellar.S.insert(Time.stamp(), 999);
+}); 
+```
+
+In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we can also find more complex, and working **unrealistic** example:  
 
 ```java
 /**
  * Bunch of complex and nested transactions. 
  * 
  * Take a look at the comments within!
- */ 
+ */                             
 public void populate(int multiplier) {
     newTransaction((tx1) -> {
         insert(Time.stamp(), multiplier * 101);
@@ -539,7 +567,8 @@ public void populate(int multiplier) {
             });
         });
     });
-}
+}                                           
+
 ```
 In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we also added a couple more methods:
 
@@ -566,169 +595,39 @@ public List<Stellar> range(Timestamp from, Timestamp to) {
 }
 ```
 
-```java
-@Entity
-@Table(name = Stellar.Cons.table)
-public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Stellar extends $EntityIdUUID {
-    
-    private Timestamp time;
-    private double    usd;     // Represents the price in usd
-    
-    /////////////////////////////////////////////////////////////////////
-    
-    public static final class Cons {
-        public static final String table = "stellar";
-    }
-    
-    /////////////////////////////////////////////////////////////////////
-    
-    public static final Service S = new Service(); public static final class Service extends Crypto.CryptoService<Stellar> { private Service(){}
-        public Stellar insert(Timestamp time, double usd) {
-            return save( create().setTime(time).setUsd(usd) ); 
-        }
-    }
-}
-```
-
-Here we no longer use `requireTransaction()` because we put that burden for the caller to know to reduce boiler plate. In reality all of our code no longer uses `requireTransaction` other than by the callers because the caller would know the entire transaction scope and likely would need to wrap multiple ones to create all of the things at the same time.
-
 #### Part four
 
-If we now look at **[`PublicStaticVoidMain.java`](src/momomo/com/example/app/PublicStaticVoidMain.java)** we can find a `static void main` and some code ready to run the entire thing.
+If we now look at **[`PUBLICSTATICVOIDMAIN`](src/momomo/com/example/PUBLICSTATICVOIDMAIN.java)** we can find a `static void main` and some code ready to run the entire thing.
 
 ```java
-public class PublicStaticVoidMain {
+public static void main(String[] args) {
+    Bitcoin.S.populate(1);
+    Polkadot.S.populate(1);
+    Stellar.S.populate(1);
+
+    {
+        $TransactionHibernate tx = Crypto.repository.requireTransaction();
     
-    public static void main(String[] args) {
-        bitcoin(1);
-        polkadot(1);
-        stellar(1);
+        Bitcoin.S.populate(10);
+        Polkadot.S.populate(10);
     
-        {
-            $TransactionHibernate tx = requireTransaction();
-    
-            bitcoin(10);
-            polkadot(10);
-    
-            tx.rollback();      // We roll back!
-        }
-    }
-    
-    private static void bitcoin(int mul) {
-        // Multiple transactions
-        Bitcoin.S.insert(Time.stamp(), mul * 100001);
-        Bitcoin.S.insert(Time.stamp(), mul * 100002);
-        Bitcoin.S.insert(Time.stamp(), mul * 100003);
-        Bitcoin.S.insert(Time.stamp(), mul * 100004);
-        Bitcoin.S.insert(Time.stamp(), mul * 100005);
-    }
-    
-    private static void polkadot(int mul) {
-        // Multiple transactions
-        Polkadot.S.insert(Time.stamp(), mul * 1001);
-        Polkadot.S.insert(Time.stamp(), mul * 1002);
-        Polkadot.S.insert(Time.stamp(), mul * 1003);
-        Polkadot.S.insert(Time.stamp(), mul * 1004);
-        Polkadot.S.insert(Time.stamp(), mul * 1005);
-    }
-    
-    /**
-     * Bunch of complex and nested transaction! 
-     * Take a look at the comments!
-     */
-    private static void stellar(int mul) {
-        // One transaction
-        Crypto.repository.newTransaction((txA) -> {
-            Stellar.S.insert(Time.stamp(), mul * 101);
-            Stellar.S.insert(Time.stamp(), mul * 102);
-            Stellar.S.insert(Time.stamp(), mul * 103);
-            Stellar.S.insert(Time.stamp(), mul * 104);
-            Stellar.S.insert(Time.stamp(), mul * 105);
-    
-            // Start a new transaction within
-            Crypto.repository.newTransaction(txB -> {
-                Stellar.S.insert(Time.stamp(), mul * 201);
-                Stellar.S.insert(Time.stamp(), mul * 202);
-                Stellar.S.insert(Time.stamp(), mul * 203);
-                Stellar.S.insert(Time.stamp(), mul * 204);
-                Stellar.S.insert(Time.stamp(), mul * 205);
-    
-                // Another one
-                Crypto.repository.newTransaction(txC -> {
-                    Stellar.S.insert(Time.stamp(), mul * 301);
-                    Stellar.S.insert(Time.stamp(), mul * 302);
-                    Stellar.S.insert(Time.stamp(), mul * 303);
-                    Stellar.S.insert(Time.stamp(), mul * 304);
-                    Stellar.S.insert(Time.stamp(), mul * 305);
-                });
-    
-                // Continue on the previous last active one (same as txB) 
-                Crypto.repository.requireTransaction(txD -> {
-                    Stellar.S.insert(Time.stamp(), mul * 401);
-                    Stellar.S.insert(Time.stamp(), mul * 402);
-                    Stellar.S.insert(Time.stamp(), mul * 403);
-                    Stellar.S.insert(Time.stamp(), mul * 404);
-                    Stellar.S.insert(Time.stamp(), mul * 405);
-                });
-                
-                // Neither 201 ... or 401 ... will get into db since that tx rolledback
-                txB.rollback();
-                
-                // The same as txA, no issues there. Should be in.   
-                Crypto.repository.requireTransaction(txE -> {
-                    Stellar.S.insert(Time.stamp(), mul * 501);
-                    Stellar.S.insert(Time.stamp(), mul * 502);
-                    Stellar.S.insert(Time.stamp(), mul * 503);
-                    Stellar.S.insert(Time.stamp(), mul * 504);
-                    Stellar.S.insert(Time.stamp(), mul * 505);
-    
-                    // The same as txA and txE, no issues there. Should enter db.    
-                    Crypto.repository.requireTransaction(($TransactionHibernate txF) -> {
-                        Stellar.S.insert(Time.stamp(), mul * 601);              
-                        Stellar.S.insert(Time.stamp(), mul * 602);
-                        Stellar.S.insert(Time.stamp(), mul * 603);
-                        Stellar.S.insert(Time.stamp(), mul * 604);
-                        Stellar.S.insert(Time.stamp(), mul * 605);
-    
-                        // New transaction, will be in    
-                        Crypto.repository.newTransaction(($TransactionHibernate txG) -> {
-                            Stellar.S.insert(Time.stamp(), mul * 701);
-                            Stellar.S.insert(Time.stamp(), mul * 702);
-                            Stellar.S.insert(Time.stamp(), mul * 703);
-                            Stellar.S.insert(Time.stamp(), mul * 704);
-                            Stellar.S.insert(Time.stamp(), mul * 705);
-                        });
-    
-                        // New transaction, won't be in    
-                        Crypto.repository.newTransaction(($TransactionHibernate txH) -> {
-                            Stellar.S.insert(Time.stamp(), mul * 801);
-                            Stellar.S.insert(Time.stamp(), mul * 802);
-                            Stellar.S.insert(Time.stamp(), mul * 803);
-                            Stellar.S.insert(Time.stamp(), mul * 804);
-                            Stellar.S.insert(Time.stamp(), mul * 805);
-                            
-                            txH.rollback();
-                        });
-                    });
-                });
-            });
-        });
+        tx.rollback();      // We roll back!
     }
 }
 ```
 
 When we run this static void main we will eventually find the **following in our database**:  
 
-![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.v1.2021.04.25.jpg?raw=true)                
+![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.v1.2021.04.03.jpg?raw=true)                
 
    * ***bitcoin table***  
-   ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.v1.2021.04.25.jpg?raw=true)        
+   ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.v1.2021.04.03.jpg?raw=true)        
    
    * ***polkadot table***  
-   ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.v1.2021.04.25.jpg?raw=true)        
+   ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.v1.2021.04.03.jpg?raw=true)        
    
    * ***stellar table***  
-   ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.v1.2021.04.25.jpg?raw=true)        
+   ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.v1.2021.04.03.jpg?raw=true)        
            
 
 ### Contribute

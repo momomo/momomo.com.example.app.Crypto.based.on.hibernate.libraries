@@ -6,7 +6,7 @@ import momomo.com.collections.$Set;
 import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$Migrations;
 import momomo.com.db.$SessionConfig;
-import momomo.com.example.app.entities.Bitcoin;
+import momomo.com.example.app.entities.Polkadot;
 import org.hibernate.tool.schema.TargetType;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public class CryptoMaximal {
                 // Of course you do as you please. 
                 database.tablesDrop(
                     new $Set<String>()
-                        .add(Bitcoin.Cons.table)
+                        .add(Polkadot.Cons.table)
                         .add($Migrations.Cons.table)
                 );
             }

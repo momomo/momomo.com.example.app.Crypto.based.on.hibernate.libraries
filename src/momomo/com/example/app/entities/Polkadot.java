@@ -55,16 +55,15 @@ import java.sql.Timestamp;
         
         /////////////////////////////////////////////////////////////////////
         
-        public void populate(int mul) {
+        public void populate(int multiply) {
             // Multiple transactions each started inside the insert method
-            insert(Time.stamp(), mul * 1001);
-            insert(Time.stamp(), mul * 1002);
-            insert(Time.stamp(), mul * 1003);
-            
+            insert(Time.stamp(), multiply * 1);
+            insert(Time.stamp(), multiply * 2);
+    
             // Two at once, insert call will just continue using this created transaction
-            requireTransaction(() -> {
-                insert(Time.stamp(), mul * 1004);
-                insert(Time.stamp(), mul * 1005);
+            Crypto.repository.requireTransaction(() -> {
+                insert(Time.stamp(), multiply * 3);
+                insert(Time.stamp(), multiply * 4);
             });
         }
         
