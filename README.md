@@ -226,9 +226,9 @@ which will **trigger** the database generation, **scan** for entity classes in t
 
 ### Part 2
 
-You've now seen **`requireTransaction(()->{})`**. Let us see *what else* can we do. 
+You've now seen **`requireTransaction(()->{ ... })`**. Let us see *what else* can we do. 
 
-First we want to show you how our **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class can be made **prettier** by utilitizing the already created the inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)** with the implementation being extremely **minimal**, **simple** and **straightforward**. 
+We want to show you how our **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class can be made **prettier** by utilitizing the already created the inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)** with the implementation being extremely **minimal**, **simple** and **straightforward**. 
 
 ```java
 public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { 
@@ -257,7 +257,7 @@ requireTransaction(() -> {
 
 ### Part 3                                 
 
-We now look at code pieces of the **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which also **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)** containing just example code that is really never invoked. 
+We now look at code pieces of the **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)** containing just example code that is really never invoked. 
 
 ```java
 // Given 
@@ -621,7 +621,7 @@ public static void main(String[] args) {
 
 When we run this static void main we will eventually find the **following in our database**:  
 
-![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.2021.04.03.V1.jpg?raw=true)                
+![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.2021.04.03.V2.jpg?raw=true)                
 
    * ***bitcoin table***  
    ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.2021.04.03.V1.jpg?raw=true)        
@@ -630,7 +630,7 @@ When we run this static void main we will eventually find the **following in our
    ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.2021.04.03.V2.jpg?raw=true)        
    
    * ***stellar table***  
-   ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.2021.04.03.V1.jpg?raw=true)        
+   ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.2021.04.03.V2.jpg?raw=true)        
            
 
 ### Contribute

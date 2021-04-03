@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import momomo.com.Time;
 import momomo.com.db.$TransactionHibernate;
-import momomo.com.db.entities.$EntityIdUUID;
+import momomo.com.db.entities.$EntityIdLong;
 import momomo.com.example.app.Crypto;
 import org.hibernate.criterion.Restrictions;
 
@@ -22,7 +22,7 @@ import java.util.List;
  * 
  * @author Joseph S.
  */
-@Entity @Table(name = Stellar.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Stellar extends $EntityIdUUID {
+@Entity @Table(name = Stellar.Cons.table) public @Accessors(chain = true) @Getter @Setter(AccessLevel.PROTECTED) final class Stellar extends $EntityIdLong {
     
     @Column(name = Cons.time) private Timestamp time;
     @Column(name = Cons.usd ) private double    usd;     // Represents the price in usd
