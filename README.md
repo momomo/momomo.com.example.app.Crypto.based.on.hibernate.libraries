@@ -228,7 +228,7 @@ which will **trigger** the database generation, **scan** for entity classes in t
 
 You've now seen **`requireTransaction(()->{})`**. Let us see *what else* can we do. 
 
-First we want to show you how our **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class can be made **prettier** by utilitizing the already created the inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)** with the implementation being extremely **simple**, and **minimal**. 
+First we want to show you how our **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class can be made **prettier** by utilitizing the already created the inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)** with the implementation being extremely **minimal**, **simple** and **straightforward**. 
 
 ```java
 public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { 
