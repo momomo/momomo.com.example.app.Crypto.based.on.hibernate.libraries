@@ -162,9 +162,9 @@ return Crypto.repository.requireTransaction((tx) -> {
 });
 ```                                                                                                                            
 
-The **`save(entity)`** call will execute within a `transaction` and when it terminates it will **commit the transaction** if it **was the one who started it**.
+The **`save(entity)`** call will execute within a **transaction** and when it terminates it will **commit** transaction if it **was the one who started it**.
 
-The **`save()`** call could really be your own normal logic. If you use `Spring` you would use whatever you where you using, likely using an `EntityManager` and calling `em.save(entity)`, and if `Hibernate` likey `session.saveOrUpdate(entity)`. 
+The **`save()`** call could really be your own normal logic. If you use `Spring` you would use whatever you where you using before, likely using an **`EntityManager`** and calling **`em.save(entity)`**, and if **`Hibernate`** likey **`session.saveOrUpdate(entity)`**. 
 
 Here we used our already created and **capable** repository which will eventually call `session.saveOrUpdate(entity)` and to ensure that it was saved properly, it checks it was assigned an `id` as it should which is not always the case. 
 
