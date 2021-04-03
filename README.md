@@ -236,7 +236,7 @@ public abstract static class CryptoService<T extends $EntityId> extends $Service
 }
 ```                                                            
 
-Now we've rewritten **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** and called it **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** which now contains a **minimal** version of the logic in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.
+Now we've rewritten **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** as **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** which now contains a **minimal** version of the logic in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.
 
 1. The entity class now extends **`$EntityIdUUID`** which will generate an UUID identifier for us, so need to manually set that part.  
 2. **[`Polkadto.Service`](src/momomo/com/example/app/entities/Etherum.java)** now **`extends`** **[`Crypto.CryptoService<Polkadot>`](src/momomo/com/example/app/Crypto.java#L129)** which will gives access to a bunch of methods, such as **`save(..)`**, **`list()`**, **`validate()`**, **`findByField(...)`**, **`findByEntity(...)`**, **`reqireTransaction(...)`**, **`newTransaction(...)`**, **`supportTransaction(...)`** and many more without the need for external reference for access like in **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** where we did **`Crypto.repository.requireTransaction(...)`**, now we can simply do **`requireTransaction(...)`**.   
@@ -379,9 +379,7 @@ tx.commit();
 // We show that exceptions will bubble up to the caller
                                  
 try {
-    requireTransaction(() -> {
-        throw new IOException();
-    });
+    requireTransaction(() -> { throw new IOException(); });
 } catch (IOException exception) {
     // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. 
     // If there is a rollback exception, a $DatabaseRollbackException will be thrown instead. 
@@ -394,10 +392,9 @@ try {
                        
 try {
     File file = requireTransaction(() -> {
-        if ( false ) {
-            throw new IOException();
-        }
-        return new File("");
+        if ( true ) { return new File(""); }   
+
+        throw new IOException();                       
     });
 } catch (IOException exception) {
     // Will bubble the exception to the caller (due to Lambda.VE, Lambda.V1E) after rolling back. 
