@@ -618,16 +618,16 @@ public static void main(String[] args) {
 
 When we run this static void main we will eventually find the **following in our database**:  
 
-![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.v1.2021.04.03.jpg?raw=true)                
+![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.2021.04.03.V1.jpg?raw=true)                
 
    * ***bitcoin table***  
-   ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.v1.2021.04.03.jpg?raw=true)        
+   ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.2021.04.03.V1.jpg?raw=true)        
    
    * ***polkadot table***  
-   ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.v1.2021.04.03.jpg?raw=true)        
+   ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.2021.04.03.V1.jpg?raw=true)        
    
    * ***stellar table***  
-   ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.v1.2021.04.03.jpg?raw=true)        
+   ![Stellar table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.stellar.table.2021.04.03.V1.jpg?raw=true)        
            
 
 ### Contribute
