@@ -1,7 +1,7 @@
 <!---
 -->
 
-##### Example application currently mainly to showcase our database and transactional libraries using the Hibernate libraries
+##### Example application mainly to showcase our database and transactional modules based on Hibernate libraries
        
 * Provides an overview of the **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)**, **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**, **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)** libraries, how they are setup and used with a complete and fully working sample application. 
     *  Requires a running `postgreSQL`. We might support an *in memory database* in the future for this sample application. 
