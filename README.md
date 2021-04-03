@@ -110,9 +110,8 @@ Link to **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platf
 
 ### Part 1 
 
-We start by looking at our **first entity** 
+We start by looking at our **first entity** **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)**
 
-**[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)**
 ```java                                                       
 @Entity ... public ... final class Bitcoin implements $Entity {
     @Id
@@ -142,7 +141,7 @@ We start by looking at our **first entity**
 }
 ```
 
-We comment on the code in method `insert()` 
+In method `insert()` we have 
 
 ```java
 // We create the entity
