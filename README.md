@@ -54,9 +54,9 @@ Start by looking at
 * **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)**  
   Contains code for setting up the postgresql `database` and the Hibernate `SessionFactory` as well as provides a `CryptoTransactional` and `CryptoRepository` which will be used in our examples later. Is separated intentionally to show you the areas of responsibility. This is the implementation used in our running examples.  
 
-* **[`CryptoMinimal.java`](src/momomo/com/example/CryptoMinimal.java)** is very similar to **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** but is densed downed to show you what the minimal working configuration actually would look like.
+* **[`CryptoMinimal.java`](src/momomo/com/example/extra/CryptoMinimal.java)** is very similar to **[`Crypto`](src/momomo/com/example/app/Crypto.java)** but is densed downed to show you what the minimal working configuration actually would look like.
 
-* **[`CryptoMaximal.java`](src/momomo/com/example/CryptoMaximal.java)** is very similar to **[`Crypto.java`](src/momomo/com/example/app/Crypto.java)** but contains more **examples and comments** on some things we can modify when setting up our `database` and the `SessionFactory`.  
+* **[`CryptoMaximal.java`](src/momomo/com/example/extra/CryptoMaximal.java)** is very similar to **[`Crypto`](src/momomo/com/example/app/Crypto.java)** but contains more **examples and comments** on some things we can modify when setting up our `database` and the `SessionFactory`.  
   
 ```java                                               
 // This is all code required to get started!
@@ -600,7 +600,7 @@ public List<Stellar> range(Timestamp from, Timestamp to) {
 
 #### Part four
 
-If we now look at **[`PUBLICSTATICVOIDMAIN`](src/momomo/com/example/PUBLICSTATICVOIDMAIN.java)** we can find a `static void main` and some code ready to run the entire thing.
+If we now look at **[`PUBLICSTATICVOIDMAIN`](src/momomo/com/example/extra/PUBLICSTATICVOIDMAIN.java)** we can find a `static void main` and some code ready to run the entire thing.
 
 ```java
 public static void main(String[] args) {
