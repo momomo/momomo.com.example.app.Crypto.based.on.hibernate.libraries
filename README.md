@@ -115,7 +115,6 @@ We start by looking at our **first entity**
 **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)**
 ```java                                                       
 @Entity ... public ... final class Bitcoin implements $Entity {
-    
     @Id
     private UUID      id;
     private Timestamp time;
