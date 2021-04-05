@@ -1,4 +1,4 @@
-package momomo.com.example.extras;
+package momomo.com.example.extra;
 
 import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$SessionConfig;
