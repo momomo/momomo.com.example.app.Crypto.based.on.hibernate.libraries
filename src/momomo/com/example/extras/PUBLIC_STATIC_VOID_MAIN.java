@@ -9,12 +9,12 @@ import momomo.com.example.app.entities.Stellar;
 /**
  * @author Joseph S.
  */
-public class PUBLICSTATICVOIDMAIN {
+public class PUBLIC_STATIC_VOID_MAIN {
     
     public static void main(String[] args) {
         Bitcoin.S.populate(1);
         Polkadot.S.populate(1);
-        Stellar.S.populate(1);
+        Stellar.S.populate();
     
         // We disable autocommit using false, and commit manually 
         {
