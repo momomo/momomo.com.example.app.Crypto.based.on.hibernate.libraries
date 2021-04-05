@@ -1,10 +1,10 @@
 <!---
 -->
 
-##### Example application mainly to showcase our database and transactional modules based on Hibernate libraries
+##### Sample application mainly to showcase our database and transactional modules based on Hibernate libraries
        
-* Provides an overview of the **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)**, **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**, **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)** libraries, how they are setup and used with a complete and fully working sample application. 
-    *  Requires a running `postgreSQL`. We might support an *in memory database* in the future for this sample application. 
+Provides a getting started overview of the **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)**, **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**, **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)** libraries, how to set them up and used with a completely and fully working sample application.     
+&nbsp;&nbsp;&nbsp;► Requires a running `postgreSQL`. We might support an *in memory database* in the future for this sample application. 
 
 ##### Dependencies 
 * **[`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core)** 
@@ -110,7 +110,7 @@ Link to **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platf
 
 ### Part 1 
 
-We start by looking at our **first entity** **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)**
+We start by looking at our **first entity** **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)**
 
 ```java                                                       
 @Entity ... public ... final class Bitcoin implements $Entity {
@@ -195,12 +195,8 @@ So given the following in **[`Bitcoin.Service`](src/momomo/com/example/app/entit
     return Crypto.repository.requireTransaction((tx)-> {
         return save(entity);
     });
-}
-```
+}                                                  
 
-and  
-
-```java
 public void populate(int multiply) {
     // Multiple transactions each started inside the insert method
     insert(Time.stamp(), multiply * 1);
@@ -226,20 +222,21 @@ which will **trigger** the database generation, **scan** for entity classes in t
 
 ### Part 2
 
-You've now seen **`requireTransaction(()->{ ... })`**. Let us see *what else* can we do. 
-
-We want to show you how our **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** class can be made **prettier** by utilitizing the already created the inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)** with the implementation being extremely **minimal**, **simple** and **straightforward**. 
+You've now seen **`requireTransaction(()->{ ... })`** but let us see *what else* we can do. 
+ 
+ First however, we rewrite **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** class by making it **prettier** by utilitizing the already created inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)**. 
+  
+  The implementation is **minimal**, **simple** and **straightforward** to declare and use. 
 
 ```java
 public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { 
     /** That's it! **/ 
 }
-```                                                            
+```
 
-Now we've rewritten **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** as **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** which now contains a **minimal** version of the logic in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** class could look like.
-
+We make use of this class in a another class **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** that now contains a **minimal** version of the logic found in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** with the following changes listed:
 1. The entity class now extends **`$EntityIdUUID`** which will generate an UUID identifier for us, so need to manually set that part.  
-2. **[`Polkadto.Service`](src/momomo/com/example/app/entities/Etherum.java)** now **`extends`** **[`Crypto.CryptoService<Polkadot>`](src/momomo/com/example/app/Crypto.java#L129)** which will gives access to a bunch of methods, such as **`save(..)`**, **`list()`**, **`validate()`**, **`findByField(...)`**, **`findByEntity(...)`**, **`reqireTransaction(...)`**, **`newTransaction(...)`**, **`supportTransaction(...)`** and many more without the need for external reference for access like in **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** where we did **`Crypto.repository.requireTransaction(...)`**, now we can simply do **`requireTransaction(...)`**.   
+2. **[`Polkadto.Service`](src/momomo/com/example/app/entities/Etherum.java)** now **`extends`** **[`Crypto.CryptoService<Polkadot>`](src/momomo/com/example/app/Crypto.java#L129)** which will gives access to a bunch of methods, such as **`save(..)`**, **`list()`**, **`validate()`**, **`findByField(...)`**, **`findByEntity(...)`**, **`reqireTransaction(...)`**, **`newTransaction(...)`**, **`supportTransaction(...)`** and many more without the need for external reference for access like in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** where we did **`Crypto.repository.requireTransaction(...)`**, now we can simply do **`requireTransaction(...)`**.   
 
 ```java                                      
 // This you saw in Bitcoin.java
@@ -248,7 +245,7 @@ Crypto.repository.requireTransaction(() -> {
     return Crypto.repository.save(entity);
 });
 
-// This is what we now do instead due to inheriting $Service<Polkadot>
+// This is what we now do through inheritance
  
 requireTransaction(() -> {
     return save(entity);
@@ -257,7 +254,7 @@ requireTransaction(() -> {
 
 ### Part 3                                 
 
-We now look at code pieces of the **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)** containing just example code that is really never invoked. 
+Let us now take a look at sample code found in our **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)** containing just example code that is really never invoked. 
 
 ```java
 // Given 
@@ -270,15 +267,7 @@ Etherum entity = new Etherum()
 ```
 
 ```java
-// We can demand a new transaction regardless of an existing one using
-
-Crypto.repository.requireTransaction(() -> {
-    return Crypto.repository.save(entity);
-});
-```
-
-```java
-// Now becomes 
+// We can demand a new transaction regardless of an existing one using        
 
 requireTransaction(() -> {
     return save(entity);
@@ -333,7 +322,7 @@ requireTransaction((tx) -> {
 ```            
 
 ```java
-// Rolling back inside a lambda possible                                                                            
+// Rolling back inside a lambda possible             
 
 newTransaction((tx) -> {
     save(entity);
@@ -414,8 +403,8 @@ Session s2 = newSession();
 // We can build the transaction properties and set various things ourselves
 
 requireOptions()
-    .propagation($TransactionOptions.Propagation.NEW)
-    .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
+    .propagation(Propagation.NEW)
+    .isolation(Isolation.REPEATABLE_READ)
     .timeout(1000)
     .create()
     .execute((tx)-> {
@@ -424,8 +413,7 @@ requireOptions()
         tx.afterRollback(()-> {});
 
         // ... 
-    })
-;
+    });
 ```
 
 ```java
@@ -439,8 +427,8 @@ $TransactionOptionsHibernate options = requireOptions();
 // Getting a transaction that we can execute
 
 $TransactionHibernate tx = requireOptions()
-    .propagation($TransactionOptions.Propagation.NEW)
-    .isolation($TransactionOptions.Isolation.REPEATABLE_READ)
+    .propagation(Propagation.NEW)
+    .isolation(Isolation.REPEATABLE_READ)
     .timeout(1000)
     .create()
 ;
@@ -486,13 +474,21 @@ requireOptions()
 
 ### Part 3
 
-While in Bitcoin, Etherum, Polkadot services, we required the transaction inside the insert method, in Stellar, we no longer use `requireTransaction()` because we put that burden for the caller to know the call needs a transaction to reduce boiler plate further. 
+While in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)**, **[`Etherum`](src/momomo/com/example/app/entities/Etherun.java)**, **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** services, we required the transaction inside the insert method, in **[`Stellar`](src/momomo/com/example/app/entities/Stellar.java)**, we no longer make use `requireTransaction()` inside the `service` because figure it is better design to `place that burden` on the caller to know the call needs a transaction to reduce boiler plate further. 
 
-In reality all of our code no longer uses `requireTransaction` other than by the callers because the caller would know the entire transaction scope and likely would need to make more than one insert across multiple tables to create all of the things at the same time.
+We need not to **`requireTransaction()`** for every database operation and in reality the callers would know database operations are to be performed and thus know the entire *transaction scope*, likely containing more more many reads and inserts across several tables to create all of the things at action time.
 
-Using Spring, that caller would have had to extract those parts to fit neatly into a method, while the caller for us would just wrap them inside a lambda. 
+Using `Spring`, that caller would have had to extract those parts to fit neatly into a method while the caller for us would simply wrap them inside a lambda. 
 
-So in **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we can now find: 
+So rather than doing: 
+
+```java
+public Stellar insert(Timestamp time, double usd) {
+    return requireTrasaction( () -> save( create().setTime(time).setUsd(usd) ) ); 
+}
+```
+
+in **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we instead simply do:    
 
 ```java
 public Stellar insert(Timestamp time, double usd) {
@@ -500,15 +496,9 @@ public Stellar insert(Timestamp time, double usd) {
 }
 ```
 
-which expects the caller to do the following when calling: 
+Doing this we expect the caller to do the **`requireTransaction()`** call for us.  
 
-```java
-Crypto.repository.requireTransaction(()-> {
-    Stellar.S.insert(Time.stamp(), 999);
-}); 
-```
-
-In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we can also find more complex, and working **unrealistic** example:  
+In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we can also find more complex working example:  
 
 ```java
 /**
@@ -605,13 +595,31 @@ public static void main(String[] args) {
     Polkadot.S.populate(1);
     Stellar.S.populate(1);
 
+    // We disable autocommit using false, and commit manually 
     {
-        $TransactionHibernate tx = Crypto.repository.requireTransaction();
-    
-        Bitcoin.S.populate(10);
-        Polkadot.S.populate(10);
-    
-        tx.rollback();      // We roll back!
+        Crypto.repository.requireTransaction(tx-> {
+            Bitcoin.S.populate(1000);
+            
+            tx.commit();
+            
+        }, false /** disable autocommit **/);
+    }
+
+    // We rollback from inside the lambda
+    {
+        Crypto.repository.requireTransaction(tx -> {
+            Bitcoin.S.populate(-10000);
+        
+            tx.rollback();
+        });
+    }
+
+    // We rollback from 'free' mode
+    {
+        $Transaction tx = Crypto.repository.requireTransaction();
+        Bitcoin.S.populate(-100000);
+        
+        tx.rollback();
     }
 }
 ```
@@ -621,7 +629,7 @@ When we run this static void main we will eventually find the **following in our
 ![Generated tables](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.tables.2021.04.03.V2.jpg?raw=true)                
 
    * ***bitcoin table***  
-   ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.2021.04.03.V1.jpg?raw=true)        
+   ![Bitcoin table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.bitcoin.table.2021.04.05.V1.jpg?raw=true)        
    
    * ***polkadot table***  
    ![Polkadot table](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/database.polkadot.table.2021.04.03.V2.jpg?raw=true)        

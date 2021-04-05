@@ -1,4 +1,4 @@
-package momomo.com.example.extra;
+package momomo.com.example.extras;
 
 import momomo.com.IO;
 import momomo.com.Is;
