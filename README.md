@@ -480,7 +480,7 @@ public Stellar insert(Timestamp time, double usd) {
 }
 ```
 
-in **[`Stellar.Service`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/entities/Stellar.java)** we instead simply do:    
+in **[`Stellar.Service`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/entities/Stellar.java)** we simply do:    
 
 ```java
 public Stellar insert(Timestamp time, double usd) {
@@ -552,7 +552,7 @@ public void populate(int multiplier) {
     });
 }                                           
 ```
-In **[`Stellar.Service`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/entities/Stellar.java)** we also added a couple more methods, just as examples on what else we can do: 
+We also added a couple more methods, just as examples on what else we can do: 
 
 ```java
 // Return all the historic data within polkadot table
