@@ -108,7 +108,7 @@ Now that you've seen it, glanced it, consumed it, you may ***proceed***.
 
 Link to **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)**, **[`$Transactional`](https://github.com/momomo/momomo.com.platform.db.transactional/tree/master/src/momomo/com/db/%24Transactional.java)**, **[`$SessionFactoryRepository`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/sessionfactory/$SessionFactoryRepository.java)** 
 
-### Part 1 
+### `Part 1` - **[`Bitcoin.java`](src/momomo/com/example/app/entities/Bitcoin.java)** 
 
 We start by looking at our **first entity** **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)**
 
@@ -220,9 +220,9 @@ public static void main(String[] args) {
 
 which will **trigger** the database generation, **scan** for entity classes in the *configured packages*, setup the **`SessionFactory`** and get you a transaction to eventually create and **save** entities to the database.
 
-### Part 2
+### `Part 2` - **[`Polkadot.java`](src/momomo/com/example/app/entities/Polkadot.java)** 
 
-You've now seen **`requireTransaction(()->{ ... })`** but let us see *what else* we can do. 
+You saw **`requireTransaction(()->{ ... })`** in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** but let us see *what else* we can do. 
  
  First however, we rewrite **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)** class by making it **prettier** by utilitizing the already created inner class **[`Crypto.CryptoService`](src/momomo/com/example/app/Crypto.java#L129)** at the **bottom** of **[`Crypto`](src/momomo/com/example/app/Crypto.java)**. 
   
@@ -252,7 +252,7 @@ requireTransaction(() -> {
 });
 ```                          
 
-### Part 3                                 
+### `Part 3` - **[`Etherum.java`](src/momomo/com/example/app/entities/Etherum.java)**                                 
 
 Let us now take a look at sample code found in our **dummy class** **[`Etherum.Service`](src/momomo/com/example/app/entities/Etherum.java)** which **`extends`** **[`Crypto.CryptoService<Etherum>`](src/momomo/com/example/app/Crypto.java#L129)** containing just example code that is really never invoked. 
 
@@ -472,9 +472,9 @@ requireOptions()
 ;
 ```                                                                                                                              
 
-### Part 3
+### `Part 4` - **[`Stellar.java`](src/momomo/com/example/app/entities/Stellar.java)**  
 
-While in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)**, **[`Etherum`](src/momomo/com/example/app/entities/Etherun.java)**, **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** services, we required the transaction inside the insert method, in **[`Stellar`](src/momomo/com/example/app/entities/Stellar.java)**, we no longer make use `requireTransaction()` inside the `service` because figure it is better design to `place that burden` on the caller to know the call needs a transaction to reduce boiler plate further. 
+While in **[`Bitcoin`](src/momomo/com/example/app/entities/Bitcoin.java)**, **[`Etherum`](src/momomo/com/example/app/entities/Etherun.java)**, **[`Polkadot`](src/momomo/com/example/app/entities/Polkadot.java)** services, we required the transaction inside the insert method, in **[`Stellar`](src/momomo/com/example/app/entities/Stellar.java)**, we no longer make use of `requireTransaction()` inside the `service` because it is better design to `place that burden` on the caller to know the call needs a transaction to reduce boiler plate further. 
 
 We need not to **`requireTransaction()`** for every database operation and in reality the callers would know database operations are to be performed and thus know the entire *transaction scope*, likely containing more more many reads and inserts across several tables to create all of the things at action time.
 
@@ -560,7 +560,7 @@ public void populate(int multiplier) {
     });
 }                                           
 ```
-In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we also added a couple more methods:
+In **[`Stellar.Service`](src/momomo/com/example/app/entities/Stellar.java)** we also added a couple more methods, just as examples on what else we can do: 
 
 ```java
 // Return all the historic data within polkadot table
@@ -585,7 +585,7 @@ public List<Stellar> range(Timestamp from, Timestamp to) {
 }
 ```
 
-#### Part four
+### `Part 5` - **`public static void main`**  
 
 If we now look at **[`PUBLIC_STATIC_VOID_MAIN`](src/momomo/com/example/extra/PUBLIC_STATIC_VOID_MAIN.java)** we can find a `static void main` and some code ready to run the entire thing.
 
