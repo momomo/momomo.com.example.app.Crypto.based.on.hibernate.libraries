@@ -39,7 +39,7 @@ A library to execute database command in transactions without having to use anno
 The reason for writing this sample application was to showcase **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)**, **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**, **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)** libraries, how we can **easily** set them up to be used using a complete and fully working sample application.     
 &nbsp;&nbsp;&nbsp;► Requires a running `postgreSQL`. We might support an *in memory database* in the future for this sample application.  
 
-We now believe this is the beginning of an *entire application platform* coming as we continue to make available more and more of our libraries to the public.
+But we now believe this is the beginning of an *entire application platform* coming as we continue to make available more and more of our libraries to the public.
 
 ### Getting started
 
