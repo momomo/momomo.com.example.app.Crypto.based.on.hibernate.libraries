@@ -64,7 +64,7 @@ Start by looking at
 public class CryptoMinimal {
     
     private static final SessionFactory                SESSION_FACTORY = new CryptoSessionConfig().create();
-    public  static final CryptoTransactionalRepository repository      = new CryptoTransactionalRepository();
+    public  static final CryptoTransactionalRepository REPOSITORY      = new CryptoTransactionalRepository();
     
     public static final class CryptoDatabase implements $DatabasePostgres {
         @Override public String name() {
@@ -86,7 +86,7 @@ public class CryptoMinimal {
         }
     }
     
-    public static final class CryptoTransactionalRepository implements $SessionFactoryRepository, $TransactionalHibernate {
+    public static final class CryptoTransactionalRepository implements $SessionManagerRepository, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;
         }

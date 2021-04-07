@@ -7,7 +7,6 @@ import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$Migrations;
 import momomo.com.db.$SessionConfig;
 import momomo.com.example.app.entities.Stellar;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 
 import java.io.File;
@@ -17,7 +16,7 @@ import java.io.File;
  * 
  * @author Joseph S.
  */
-public class CryptoMaximal {
+public class CryptoLargest {
     
     /**
      * Our database setup also gives us access to execute JDBC queries anytime should we require that.
