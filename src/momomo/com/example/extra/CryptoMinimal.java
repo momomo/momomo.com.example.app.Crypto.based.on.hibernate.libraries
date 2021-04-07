@@ -42,6 +42,9 @@ public class CryptoMinimal {
     
     /////////////////////////////////////////////////////////////////////
     
+    /**
+     * Note, both a repository and a transactional instance class in one! 
+     */
     public static final class CryptoTransactionalRepository implements $SessionManagerRepository, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;

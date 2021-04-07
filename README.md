@@ -75,7 +75,9 @@ public class CryptoMinimal {
         @Override public String password() {
             return "postgres";
         }
-    }
+    }                                                                
+
+    /////////////////////////////////////////////////////////////////////
     
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
         private CryptoSessionConfig() {
@@ -85,8 +87,13 @@ public class CryptoMinimal {
         @Override protected String[] packages() {
             return new String[]{ "momomo/com/example/app/entities" }; // The package to scan for entities 
         }
-    }
+    }                                                 
+
+    /////////////////////////////////////////////////////////////////////
     
+    /**
+     * Note, both a repository and a transactional instance class in one! 
+     */                                                                     
     public static final class CryptoTransactionalRepository implements $SessionManagerRepository, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;
