@@ -13,7 +13,7 @@
 * **[`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)**
 * **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)**
 
-##### Our significant repositories                          
+##### Our highlighted repositories                          
 
 * **[`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core)**  
 Is essentially what makes the our the core of several of momomo.com's public releases and contains a bunch of Java utility.
@@ -31,7 +31,7 @@ Allows for nanosecond time resolution when asking for time from Java Runtime in 
 A library to execute database command in transactions without having to use annotations based on Hibernate libraries. No Spring!
 
 * **[`momomo.com.platform.db.transactional.Spring`](https://github.com/momomo/momomo.com.platform.db.transactional.Spring)**  
-A library to execute database command in transactions without having to use annotations based on Spring libraries. 
+A library to execute database command in transactions without having to use annotations based on Spring libraries.
                                      
 ### Background
 
