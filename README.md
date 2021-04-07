@@ -77,7 +77,7 @@ public class CryptoMinimal {
     }
     
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
-        public CryptoSessionConfig() {
+        private CryptoSessionConfig() {
             super(new CryptoDatabase());
         }
         

@@ -12,7 +12,7 @@ import org.hibernate.tool.schema.TargetType;
 import java.io.File;
 
 /**
- * Contains more configuration with comments. 
+ * Contains more configuration options than {@link momomo.com.example.app.Crypto} with comments. 
  * 
  * @author Joseph S.
  */
@@ -78,10 +78,27 @@ public class CryptoLargest {
         /////////////////////////////////////////////////////////////////////
     
         /**
+         * Example 
+         */
+        @Override protected Export export(Export export) {
+            if ( false ) {
+                // By default we generate a file with the sql to allow you to do what you want with it, including database.sql( thesql ) 
+                // to execute it but for demo we generate by directly targeting the database instead.
+                // We normally do it using Migrations commented at the bottom below in SessionConfig
+            
+                return export.target(TargetType.DATABASE);
+            }
+        
+            return export;
+        }
+    
+        /////////////////////////////////////////////////////////////////////
+    
+        /**
          * Example
          */
         @Override protected boolean drop() {
-            return !Is.Production();                        // We drop in development and test and start fresh everytime. You may use whatever logic here to drop or not. 
+            return !Is.Production();                 // We drop in development and test and start fresh everytime. You may use whatever logic here to drop or not. 
         }
     
         /////////////////////////////////////////////////////////////////////
@@ -104,23 +121,6 @@ public class CryptoLargest {
                         .add($Migrations.Cons.table)
                 );
             }
-        }
-    
-        /////////////////////////////////////////////////////////////////////
-    
-        /**
-         * Example 
-         */
-        @Override protected Export export(Export export) {
-            if ( false ) {
-                // By default we generate a file with the sql to allow you to do what you want with it, including database.sql( thesql ) 
-                // to execute it but for demo we generate by directly targeting the database instead.
-                // We normally do it using Migrations commented at the bottom below in SessionConfig
-        
-                return export.target(TargetType.DATABASE);
-            }
-            
-            return export;
         }
     
         /////////////////////////////////////////////////////////////////////

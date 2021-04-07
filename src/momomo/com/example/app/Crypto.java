@@ -55,7 +55,7 @@ public class Crypto {
      * See {@link momomo.com.example.extra.CryptoLargest.CryptoSessionConfig} for more configuration options with plenty of comments. Also check the superclass. 
      */
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
-        public CryptoSessionConfig() {
+        private CryptoSessionConfig() {
             super(DATABASE);
         }
     
@@ -72,7 +72,7 @@ public class Crypto {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     
-    public static final class CryptoRepository implements $SessionManagerRepository {
+    public static final class CryptoRepository implements $SessionManagerRepository { 
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;
         }
