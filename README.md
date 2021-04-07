@@ -47,7 +47,7 @@ But now we believe this is the beginning of an entire application platform comin
 
 The entire thing is really much much simpler to understand and navigate if you just **check out the entire repository**, **navigate and/or run** the examples. But we will try to guide you here as well.
 
-We've decided to develope a **Crypto** related application!
+We've decided to develop a **Crypto** related application!
 
 Start by looking at
 
