@@ -9,8 +9,8 @@ Provides a getting started overview of the **[`momomo.com.platform.db.base`](htt
 ##### Dependencies 
 * **[`momomo.com.platform.Core`](https://github.com/momomo/momomo.com.platform.Core)** 
 * **[`momomo.com.platform.Lambda`](https://github.com/momomo/momomo.com.platform.Lambda)**
-* **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
-* **[`momomo.com.platform.db.base.jpa`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
+* **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)**
+* **[`momomo.com.platform.db.base.jpa`](https://github.com/momomo/momomo.com.platform.db.base.jpa)**
 * **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**
 * **[`momomo.com.platform.db.base.jpa.session.with.postgres`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session.with.postgres)**
 * **[`momomo.com.platform.db.transactional`](https://github.com/momomo/momomo.com.platform.db.transactional)**
