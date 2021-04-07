@@ -33,7 +33,7 @@ A library to execute database command in transactions without having to use anno
 
 * **[`momomo.com.platform.db.transactional.Spring`](https://github.com/momomo/momomo.com.platform.db.transactional.Spring)**  
 A library to execute database command in transactions without having to use annotations based on Spring libraries. 
-                                     s
+                                     
 ### Background
 
 The reason for writing this sample application was to showcase **[`momomo.com.platform.db.base`](https://github.com/momomo/momomo.com.platform.db.base)**, **[`momomo.com.platform.db.base.jpa.session`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session)**, **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)** libraries, how we can **easily** set them up to be used using a complete and fully working sample application.     
