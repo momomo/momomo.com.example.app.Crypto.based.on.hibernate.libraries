@@ -56,7 +56,7 @@ Start by looking at
 
 * **[`CryptoMinimal.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/extra/CryptoMinimal.java)** is very similar to **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** but is densed downed to show you what the minimal working configuration actually would look like.
 
-* **[`CryptoMaximal.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/extra/CryptoMaximal.java)** is very similar to **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** but contains more **examples and comments** on some things we can modify when setting up our `database` and the `SessionFactory`.  
+* **[`CryptoLargest.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/extra/CryptoLargest.java)** is very similar to **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** but contains more **examples and comments** on some things we can modify when setting up our `database` and the `SessionFactory`.  
   
 ```java                                               
 // This is all code required to get started!
@@ -94,13 +94,23 @@ public class CryptoMinimal {
 }
 ```  
    
-Now that you've seen it, glanced it, consumed it, as well as having glanced **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** which is the one we actually use, you may ***proceed***.   
+Now that you've seen it, glanced it, consumed it, as well as having glanced **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** which is the one we actually use, you may ***proceed***.
 
 ---
 
 ### Demonstration of the `Transactional` API 
 
-Link to **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)**, **[`$Transactional`](https://github.com/momomo/momomo.com.platform.db.transactional/tree/master/src/momomo/com/db/%24Transactional.java)**, **[`$SessionFactoryRepository`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/sessionfactory/$SessionFactoryRepository.java)** 
+Link to **[`$TransactionalHibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate/tree/master/src/momomo/com/db/%24TransactionalHibernate.java)**, **[`$Transactional`](https://github.com/momomo/momomo.com.platform.db.transactional/tree/master/src/momomo/com/db/%24Transactional.java)**, **[`$SessionFactoryRepository`](https://github.com/momomo/momomo.com.platform.db.base.jpa.session/blob/master/src/momomo/com/db/sessionfactory/$SessionFactoryRepository.java)**
+
+For the lazy, here are the signatures in **[`$Transactional`](https://github.com/momomo/momomo.com.platform.db.transactional/tree/master/src/momomo/com/db/%24Transactional.java)**:
+
+![Transactional API signatures](https://github.com/momomo/momomo.com.github.statics/blob/master/momomo.com.example.app.Crypto/graphics/signatures.2021.04.07.V1.jpg?raw=true)
+
+ 
+
+
+
+
 
 ### `Part 1` - **[`Bitcoin.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/entities/Bitcoin.java)** 
 
@@ -118,19 +128,18 @@ We start by looking at our **first entity** **[`Bitcoin`](https://github.com/mom
 ``` ... ```
 
 ```java
-    public static final Service S = new Service(); public static final class Service {    
-       /** 
-        * Insert method that creates a bitcoin, then requires a transaction, and then saves it within the transaction, which then commits if it was the one to start it.  
-        */                  
-        public Bitcoin insert(Timestamp time, double usd) {
-            // This "very very expensive" creation need not to run inside the transaction 
-            Bitcoin entity = new Bitcoin().setId(UUID.randomUUID()).setTime(time).setUsd(usd);
-    
-            // Now, require the transaction and execute save within, also return the saved entity. 
-            return Crypto.repository.requireTransaction(() -> {
-                return Crypto.repository.save(entity);
-            });
-        }
+public static final Service S = new Service(); public static final class Service {    
+   /** 
+    * Insert method that creates a bitcoin, then requires a transaction, and then saves it within the transaction, which then commits if it was the one to start it.  
+    */                  
+    public Bitcoin insert(Timestamp time, double usd) {
+        // This "very very expensive" creation need not to run inside the transaction 
+        Bitcoin entity = new Bitcoin().setId(UUID.randomUUID()).setTime(time).setUsd(usd);
+
+        // Now, require the transaction and execute save within, also return the saved entity. 
+        return Crypto.repository.requireTransaction(() -> {
+            return Crypto.repository.save(entity);
+        });
     }
 }
 ```
@@ -183,7 +192,7 @@ from anyplace, even from a plain **`static void main`**.
 So given the following in **[`Bitcoin.Service`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/entities/Bitcoin.java)**:
 
 ```java
- public Bitcoin insert(Timestamp time, double usd) {
+public Bitcoin insert(Timestamp time, double usd) {
     Bitcoin entity = new Bitcoin().setId(Randoms.UUID()).setTime(time).setUsd(usd);
 
     return Crypto.repository.requireTransaction((tx)-> {
@@ -223,8 +232,8 @@ You saw **`requireTransaction(()->{ ... })`** in **[`Bitcoin`](https://github.co
   The implementation is **minimal**, **simple** and **straightforward** to declare and use. 
 
 ```java
-public abstract static class CryptoService<T extends $EntityId> extends $Service<T> implements CryptoTransactional { 
-    /** That's it! **/ 
+public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate {
+    @Override public CryptoRepository repository() { return CRYPTO.REPOSITORY; }
 }
 ```
 

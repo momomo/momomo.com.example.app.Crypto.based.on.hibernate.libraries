@@ -56,7 +56,7 @@ public class Crypto {
      */
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
         private CryptoSessionConfig() {
-            super(DATABASE);
+            super(Crypto.DATABASE);
         }
     
         @Override protected String[] packages() {
@@ -74,7 +74,7 @@ public class Crypto {
     
     public static final class CryptoRepository implements $SessionManagerRepository { 
         @Override public SessionFactory sessionFactory() {
-            return SESSION_FACTORY;
+            return Crypto.SESSION_FACTORY;
         }
     }
     
@@ -84,7 +84,7 @@ public class Crypto {
     
     public static final class CryptoTransactional implements $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
-            return SESSION_FACTORY;
+            return Crypto.SESSION_FACTORY;
         }
     }
     
@@ -94,7 +94,7 @@ public class Crypto {
     
     public static final class CryptoTransactionalRepository implements $SessionManagerRepository, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
-            return SESSION_FACTORY;
+            return Crypto.SESSION_FACTORY;
         }
     }
     
@@ -107,7 +107,7 @@ public class Crypto {
      */
     public static abstract class CryptoService<T extends $EntityId> extends $Service<T> implements $TransactionalHibernate { protected CryptoService(){ /** To be overriden by services in Entity classes**/ }
         @Override public CryptoRepository repository() {
-            return REPOSITORY;
+            return Crypto.REPOSITORY;
         }
     }
 }
