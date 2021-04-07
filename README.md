@@ -25,7 +25,7 @@ Contains a bunch of `functional interfaces` similar to `Runnable`, `Supplier`, `
 An intuitive library that allows you to return multiple return values with defined types on the fly from any method rather than being limited to the default maximum of one.
 
 * **[`momomo.com.platform.Nanotime`](https://github.com/momomo/momomo.com.platform.Nanotime)**  
-Allows for nanosecond time resolution when asking for time from Java Runtime in contrast with `System.currentTimeMillis()`.
+Allows for nanosecond time resolution when asking for time from Java Runtime in contrast with **`System.currentTimeMillis()`**.
 
 * **[`momomo.com.platform.db.transactional.Hibernate`](https://github.com/momomo/momomo.com.platform.db.transactional.Hibernate)**  
 A library to execute database command in transactions without having to use annotations based on Hibernate libraries. No Spring!
@@ -48,13 +48,13 @@ We've decided to develop a **Crypto** related application!
 
 Start by looking at
 
-* **[`Crypto.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** Contains code for setting up the postgresql `database` and the Hibernate `SessionFactory` as well as provides a `CryptoTransactional` and `CryptoRepository` which will be used in our examples later and is the implementation used in our running examples.    
+* **[`Crypto.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** Contains code for setting up the postgresql `database` and the Hibernate **`SessionFactory`** as well as provides a **`CryptoTransactional`** and **`CryptoRepository`** which will be used in our examples later and is the implementation used in our running examples.    
   
   Objects are created and separated intentionally to show you the different areas of responsibility.     
 
 * **[`CryptoMinimal.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/extra/CryptoMinimal.java)** is very similar to **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** but is densed downed to show you what the minimal working configuration actually would look like.
 
-* **[`CryptoLargest.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/extra/CryptoLargest.java)** is very similar to **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** but contains more **examples and comments** on some things we can modify when setting up our `database` and the `SessionFactory`.  
+* **[`CryptoLargest.java`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/extra/CryptoLargest.java)** is very similar to **[`Crypto`](https://github.com/momomo/momomo.com.example.app.Crypto/tree/master/src/momomo/com/example/app/Crypto.java)** but contains more **examples and comments** on some things we can modify when setting up our `database` and the **`SessionFactory`**.  
   
 ```java                                               
 // This is all code required to get started!
