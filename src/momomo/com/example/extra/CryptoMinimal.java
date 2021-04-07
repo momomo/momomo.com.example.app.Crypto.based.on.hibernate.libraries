@@ -5,8 +5,6 @@ import momomo.com.db.$SessionConfig;
 import momomo.com.db.$TransactionalHibernate;
 import momomo.com.db.sessionfactory.$SessionFactoryRepository;
 import org.hibernate.SessionFactory;
-import org.hibernate.tool.hbm2ddl.SchemaExport;
-import org.hibernate.tool.schema.TargetType;
 
 /**
  * @author Joseph S.
@@ -39,12 +37,6 @@ public class CryptoMinimal {
         
         @Override protected String[] packages() {
             return new String[]{ "momomo/com/example/app/entities" }; // The package to scan for entities 
-        }
-        
-        @Override protected Params params() {
-            return new Params().export(export ->
-                export.target(TargetType.DATABASE).action(SchemaExport.Action.BOTH)
-            );
         }
     }
     

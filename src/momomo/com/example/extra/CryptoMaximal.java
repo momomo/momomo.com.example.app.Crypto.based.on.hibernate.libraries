@@ -7,6 +7,7 @@ import momomo.com.db.$DatabasePostgres;
 import momomo.com.db.$Migrations;
 import momomo.com.db.$SessionConfig;
 import momomo.com.example.app.entities.Stellar;
+import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 
 import java.io.File;
@@ -46,12 +47,6 @@ public class CryptoMaximal {
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
     
     /**
      * Crypto setup of the session or really the SessionFactory through .create() method eventually
@@ -81,12 +76,16 @@ public class CryptoMaximal {
             super.properties();
         }
     
+        /////////////////////////////////////////////////////////////////////
+    
         /**
          * Example
          */
         @Override protected boolean drop() {
             return !Is.Production();                        // We drop in development and test and start fresh everytime. You may use whatever logic here to drop or not. 
         }
+    
+        /////////////////////////////////////////////////////////////////////
     
         /**
          * Example
@@ -108,21 +107,24 @@ public class CryptoMaximal {
             }
         }
     
+        /////////////////////////////////////////////////////////////////////
+    
         /**
          * Example 
          */
-        @Override
-        protected Params params() {
+        @Override protected Export export(Export export) {
             if ( false ) {
                 // By default we generate a file with the sql to allow you to do what you want with it, including database.sql( thesql ) 
                 // to execute it but for demo we generate by directly targeting the database instead.
                 // We normally do it using Migrations commented at the bottom below in SessionConfig
-                
-                return new $SessionConfig.Params().export(export -> export.target(TargetType.DATABASE));
+        
+                return export.target(TargetType.DATABASE);
             }
             
-            return new $SessionConfig.Params(); // Defaults to TargetType.SCRIPT which generates the schema sql and which we execute in migrate() method on the first line instead 
+            return export;
         }
+    
+        /////////////////////////////////////////////////////////////////////
     
         @Override protected void migrate(File sql) {
             database.sql( IO.text(sql) );
@@ -174,6 +176,8 @@ public class CryptoMaximal {
                 // To provide a migration of your choice just override the method newMigrations(); 
             }
         }
+    
+        /////////////////////////////////////////////////////////////////////
     }
     
 }
