@@ -40,7 +40,7 @@ The reason for writing this sample application was to showcase **[`momomo.com.pl
 
 But we now believe this is the beginning of an *entire application platform* coming as we continue to make available more and more of our libraries to the public.
 
-### Getting started
+## Getting started
 
 The entire thing is really much much simpler to understand and navigate if you just **check out the entire repository**, **navigate and/or run** the examples. But we will try to guide you here as well.
 
