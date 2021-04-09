@@ -20,7 +20,7 @@ public class CryptoMinimal {
     
     public static final class CryptoDatabase implements $DatabasePostgres {
         @Override public String name() {
-            return "crypto_database_name_based_on_hibernate_libraries";
+            return "crypto_database_name_based_on_xxxxx_libraries";
         }
         
         @Override public String password() {
