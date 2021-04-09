@@ -61,8 +61,12 @@ Start by looking at
 
 public class CryptoMinimal {
     
+    /////////////////////////////////////////////////////////////////////
+    
     private static final SessionFactory                SESSION_FACTORY = new CryptoSessionConfig().create();
     public  static final CryptoTransactionalRepository REPOSITORY      = new CryptoTransactionalRepository();
+    
+    /////////////////////////////////////////////////////////////////////
     
     public static final class CryptoDatabase implements $DatabasePostgres {
         @Override public String name() {
@@ -72,8 +76,8 @@ public class CryptoMinimal {
         @Override public String password() {
             return "postgres";
         }
-    }                                                                
-
+    }
+    
     /////////////////////////////////////////////////////////////////////
     
     public static final class CryptoSessionConfig extends $SessionConfig<CryptoDatabase> {
@@ -84,18 +88,20 @@ public class CryptoMinimal {
         @Override protected String[] packages() {
             return new String[]{ "momomo/com/example/app/entities" }; // The package to scan for entities 
         }
-    }                                                 
-
+    }
+    
     /////////////////////////////////////////////////////////////////////
     
     /**
      * Note, both a repository and a transactional instance class in one! 
-     */                                                                     
+     */
     public static final class CryptoTransactionalRepository implements $SessionManagerRepository, $TransactionalHibernate {
         @Override public SessionFactory sessionFactory() {
             return SESSION_FACTORY;
         }
     }
+    
+    /////////////////////////////////////////////////////////////////////
 }
 ```  
    
