@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import momomo.com.Time;
-import momomo.com.db.$TransactionHibernate;
+import momomo.com.db.$Transaction;
 import momomo.com.db.entities.$EntityIdLong;
 import momomo.com.example.app.Crypto;
 import org.hibernate.criterion.Restrictions;
@@ -109,18 +109,18 @@ import java.util.List;
                         insert(Time.stamp(), 52);
                         
                         // The same as tx1 and tx5, no issues there. Should enter db.    
-                        requireTransaction(($TransactionHibernate tx6) -> {
+                        requireTransaction(($Transaction tx6) -> {
                             insert(Time.stamp(), 61);
                             insert(Time.stamp(), 62);
                             
                             // New transaction, will be in    
-                            newTransaction(($TransactionHibernate tx7) -> {
+                            newTransaction(($Transaction tx7) -> {
                                 insert(Time.stamp(), 71);
                                 insert(Time.stamp(), 72);
                             });
                             
                             // New transaction, won't be in since rolled back    
-                            newTransaction(($TransactionHibernate tx8) -> {
+                            newTransaction(($Transaction tx8) -> {
                                 insert(Time.stamp(), -81);
                                 insert(Time.stamp(), -82);
                                 

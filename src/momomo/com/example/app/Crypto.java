@@ -39,7 +39,7 @@ public class Crypto {
      */
     public static final class CryptoDatabase implements $DatabasePostgres {
         @Override public String name() {
-            return "crypto_database_name_in_postgres";
+            return "crypto_database_name_based_on_hibernate_libraries";
         }
         
         @Override public String password() {
